@@ -1,5 +1,10 @@
 class Pizza < ActiveRecord::Base
-    has_many :orders_pizzas
-    #has_and_belongs_to_many :toppings
-    has_many :orders, through: :orders_pizzas
+    has_many :order_pizzas
+    has_many :orders, through: :order_pizzas
+    has_many :pizza_toppings
+    has_many :toppings, through: :pizza_toppings
+    
+    def add_topping(topping)
+        self.toppings << topping
+    end
 end
