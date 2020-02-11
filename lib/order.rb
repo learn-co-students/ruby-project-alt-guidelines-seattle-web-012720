@@ -1,4 +1,5 @@
 class Order < ActiveRecord::Base
     belongs_to :user
-    has_and_belongs_to_many :pizzas
+    has_many :orders_pizzas
+    has_many :pizzas, through: :orders_pizzas
 end

@@ -10,39 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 6) do
-
-  create_table "orders", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "num_pizzas"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "pizzas", force: :cascade do |t|
-    t.string "name"
-  end
-
-  create_table "pizzas_orders", id: false, force: :cascade do |t|
-    t.integer "pizzas_id"
-    t.integer "orders_id"
-    t.index ["orders_id"], name: "index_pizzas_orders_on_orders_id"
-    t.index ["pizzas_id"], name: "index_pizzas_orders_on_pizzas_id"
-  end
-
-  create_table "toppings", force: :cascade do |t|
-    t.string "name"
-  end
-
-  create_table "toppings_pizzas", id: false, force: :cascade do |t|
-    t.integer "toppings_id"
-    t.integer "pizzas_id"
-    t.index ["pizzas_id"], name: "index_toppings_pizzas_on_pizzas_id"
-    t.index ["toppings_id"], name: "index_toppings_pizzas_on_toppings_id"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-  end
+ActiveRecord::Schema.define(version: 0) do
 
 end
