@@ -7,4 +7,5 @@ class CreateOrders < ActiveRecord::Migration[5.1]
           t.integer :num_pizzas
           t.timestamps
         end
+      end
 end

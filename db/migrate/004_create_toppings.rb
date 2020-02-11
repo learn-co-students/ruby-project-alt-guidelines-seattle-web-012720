@@ -5,4 +5,5 @@ class CreateToppings < ActiveRecord::Migration[5.1]
           # defining columns is as simple as t.[datatype] :column
           t.string :name
         end
+      end
 end
