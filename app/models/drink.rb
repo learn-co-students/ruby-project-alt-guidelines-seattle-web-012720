@@ -1,8 +1,66 @@
+require 'pry'
 class Drink < ActiveRecord::Base 
     belongs_to :tea
-    belongs_to :topping
+    belongs_to :topping, optional: true
+    has_many :user
 
-    #create instance of drink 
+    # #   totals up tea + topping price 
+    # def self.drink_total(tea, topping)
+    #     total = tea.price + topping.price 
+    #     total 
+    # end 
     
+    # #   concatenates tea and topping name 
+    # def self.drink_name(tea, topping)
+    #     order = tea.name + topping.name
+    #     order
+    # end 
+
+    #   find tea name by id 
+    def self.find_tea_name_by_id(id)
+        Tea.find(id).name
+    end 
+
+    #   find tea price by id
+    def self.find_tea_price_by_id(id)
+        tea_price = Tea.find(id).price 
+    end 
+
+    # find topping name by id 
+    def self.find_topping_name_by_id(id)
+        Topping.find(id).name 
+    end 
+
+
+    # find topping price by id 
+    def self.find_topping_price_by_id(id)
+        Topping.find(id).price 
+    end 
+
+
+    #   most popular tea (returns id)
+    def self.popular_tea 
+        tea_count = self.group(:tea_id).count
+        most = tea_count.max_by{|id, amount| amount}
+        most[0]
+    end 
+
+    # most popular topping  (returns id)
+    def self.popular_topping 
+        topping_count = self.group(:topping_id).count
+        most = topping_count.max_by{|id, amount| amount}
+        most[0]
+    end 
+
+
+    #   most popular drink (returns name)
+
+    def self.most_popular_drink_name 
+        "#{self.find_tea_name_by_id(self.popular_topping)} with #{self.find_topping_name_by_id(self.popular_topping)}"
+    end 
+
+    def self.most_popular_drink_price 
+        self.find_tea_price_by_id(self.popular_topping) + self.find_topping_price_by_id(self.popular_topping)
+    end 
 
 end 
