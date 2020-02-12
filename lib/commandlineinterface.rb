@@ -1,5 +1,35 @@
 class CommandLineInterface
 
+    def run
+        intro
+
+        while true
+            puts "\nType 'help' to see the list of available commands. Type 'quit' to exit.".magenta
+            print "Enter command: ".cyan
+            input = gets.chomp
+
+            break if input == "quit"
+
+            if input.include?("move to ")
+                room = input.split("move to ")
+                Resident.move_to(room[1])
+            else
+                case input
+                when "help"
+                    help
+                when "list rooms"
+                    Location.list_rooms
+                when "list family"
+                    Resident.list_family
+                when "where am I"
+                    Location.where_am_i
+                else
+                    puts "\n  invalid command, type 'help' to see a list of available commands"
+                end
+            end
+        end
+    end
+    
     def intro1
         puts " \nIt's been a hard year but you've finally finished moving into your new home!".green
         puts "Your name is Miranda. You have a husband named Aaron, a daughter named Olivia,".green

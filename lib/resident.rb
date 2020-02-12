@@ -10,27 +10,30 @@ class Resident < ActiveRecord::Base
     end
 
     def self.move_to(room)
-        room = room.capitalize
-        if Location.find(Resident.find_by(name: "Miranda").location_id).name == room
-            puts "You're already in the #{room}"
-        else
-            Resident.all.map do |resident| 
-                resident.location_id = rand(Location.all[0].id..Location.all[5].id)
-            end
+        room = room.titleize
 
-            Ghost.all.map do |ghost|
-                ghost.location_id = rand(Location.all[0].id..Location.all[7].id)
-            end
+        if Location.find(Resident.find_by(name: "Miranda").location_id).name == room
+
+            puts "\nYou're already in the #{room}. You don't have time for this!"
+            puts "type 'help' to see a list of available commands"
+
+        elsif room == Location.all[0].name || Location.all[1].name || Location.all[2].name ||Location.all[3].name || Location.all[4].name
+            Location.move_all_residents
+
+            Location.move_all_ghosts
 
             Resident.find_by(name: "Miranda").location_id = Location.find_by(name: room).id
 
-            puts "You're now in the #{room}"
+            puts "\nYou're now in the #{room}"
             puts "However, on your way you heard other footsteps.".red
+        else
+            puts "\nThat isn't a valid room! You don't have time for this!".red
+            puts "type 'help' to see a list of available commands"
         end
     end
 
     def self.search
-
+        current_room = 
     end
 
 end

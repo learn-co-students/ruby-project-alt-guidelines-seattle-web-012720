@@ -12,11 +12,11 @@ attic = Location.create(name: "Attic")
 basement = Location.create(name: "Basement")
 
 # Bael always starts in the attic
-bael = Ghost.create(name: "Bael", location_id: 6)
+bael = Ghost.create(name: "Bael", location_id: Location.all[5].id)
 
 # Residents can start anywhere besides the attic or basement
-aaron = Resident.create(name: "Aaron", location_id: rand(Location.all[0].id..Location.all[5].id))
+aaron = Resident.create(name: "Aaron", location_id: rand(Location.all[0].id..Location.all[4].id))
 miranda = Resident.create(name: "Miranda", location_id: Location.all[0].id)
 olivia = Resident.create(name: "Olivia", location_id: Location.all[0].id)
-mittens = Resident.create(name: "Mittens", location_id: rand(Location.all[0].id..Location.all[5].id))
-spot = Resident.create(name: "Spot", location_id: rand(Location.all[0].id..Location.all[5].id))
+mittens = Resident.create(name: "Mittens", location_id: rand(Location.all[0].id..Location.all[4].id))
+spot = Resident.create(name: "Spot", location_id: rand(Location.all[0].id..Location.all[4].id))
