@@ -4,9 +4,9 @@ class Ghost < ActiveRecord::Base
     belongs_to :locations
 
     def attack
-        if 
-            Spook.new()
-        end
+        # if 
+        #     Spook.new()
+        # end
     end
 
 end
