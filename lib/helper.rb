@@ -8,34 +8,51 @@ class Helper
         end
     end
 
-    def self.gets_answer(yesfunction, nofunction)
+        ###took function from https://stackoverflow.com/questions/39743299/check-if-a-string-contains-only-digits-in-ruby
+    def self.check_string(string)
+        result = true
+        if string.to_i.to_s.eql? string
+          result =  false
+        end
+        result
+      end
+        ###
+
+    def self.gets_answer
         a = gets.chomp
-        if a != "Y" || a != "y" || a != "N" || a != "n"
-            until a == "Y" || a == "y" || a == "N" || a == "n"
-                puts 'Please enter Y or N'
+        if a.downcase != "y" || a.downcase != "n"
+            until a.downcase == "y" || a.downcase == "n"
+                puts "\nPlease enter Y or N\n\n"
                 a = gets.chomp 
             end 
         end
-        if a == "Y" || a == "y"
-            yesfunction
-        elsif a == "N" || a == "n"
-            nofunction
+        puts "\n"
+        if a.downcase == "y"
+            true
+        elsif a.downcase == "n"
+            false
         end
     end
 
     def self.gets_number
-        number = gets.chomp.to_i 
-        if number < 0
-            until number >= 0
-                puts 'Please enter a number greater than zero'
+        number = gets.chomp
+        if Helper.check_string(number)
+            until !Helper.check_string(number)
+                puts "\nPlease enter an integer\n\n"
+                number = gets.chomp 
+            end 
+        elsif number.to_i < 0
+            until number.to_i > 0
+                puts "\nPlease enter a number greater than zero\n\n"
                 number = gets.chomp 
             end 
         end 
-        number 
+        puts "\n"
+        number.to_i
     end
 
     def self.num_pizzas
-        puts 'How many pizzas would you like? -- enter a number'
+        puts "\nHow many pizzas would you like? -- enter a number\n\n"
         Helper.gets_number
     end
 
@@ -45,8 +62,8 @@ class Helper
             order.num_pizzas -= number
         else 
             until number <= order.num_pizzas 
-                puts "Your order only has #{number} pizza#{Helper.plural(number)}."
-                puts "How many would you like to remove?"
+                puts "\nYour order only has #{number} pizza#{Helper.plural(number)}."
+                puts "\nHow many would you like to remove?\n\n"
                 number = Helper.gets_number 
             end
             order.num_pizzas -= number
@@ -55,13 +72,13 @@ class Helper
     end
 
     def self.fetch_user
-        puts 'What is your name?'
+        puts "\nWhat is your name?\n\n"
         name = gets.chomp
         user = User.find_by(name: name)
         if user == nil
             user = User.create(name: name)
         end
-        puts "Hello #{user.name}"
+        puts "\nHello #{user.name}\n"
         user
     end
 
@@ -69,10 +86,12 @@ class Helper
         index = 0
         topping_name = ""
         toppings.length.times do 
-            if index == toppings.length - 1
-                topping_name.concat(" and #{toppings[index]}.")
+            if toppings.length == 1
+                topping_name.concat("#{toppings[index].name}")
+            elsif index == toppings.length - 1
+                topping_name.concat("and #{toppings[index].name}")
             else 
-                topping_name.concat("#{toppings[index]}, ")
+                topping_name.concat("#{toppings[index].name}, ")
             end
             index += 1
         end
@@ -80,7 +99,7 @@ class Helper
     end
 
     def self.what_toppings(number)
-        puts "What toppings would you like on your #{number} pizza#{Helper.plural(number)}?"
+        puts "What toppings would you like on your #{number} pizza#{Helper.plural(number)}?\n\n"
         answer = gets.chomp
         toppings = answer.split(/, and | and |, /).sort()
         toppings.each {|topping| 
@@ -92,7 +111,7 @@ class Helper
     def self.create_pizza(toppings)
         pizza = Pizza.all.select {|pizza| pizza.toppings == toppings}
         if pizza.empty?
-            name = "A pizza with #{Helper.topping_to_s(toppings)}"
+            name = "A pizza with #{Helper.topping_to_s(toppings)}."
             pizza = Pizza.create(name: name)
         end
         topping_objects = Topping.all.select {|topping| toppings.include?(topping.name)}
@@ -100,19 +119,25 @@ class Helper
         pizza 
     end
 
-    def self.add_remove_helper(yesfunction, nofunction)
-        puts 'Would you like to Add or Remove a pizza? -- enter ADD or REMOVE'
+    def self.comparison_helper(str1, str2, str3)
+        puts "\nWould you like to #{str1.capitalize} or #{str2.capitalize} a#{str3}? -- enter #{str1.upcase} or #{str2.upcase}\n\n"
         a = gets.chomp
-        if a != "ADD" || a != "add" || a != "REMOVE" || a != "remove"
-            until a == "ADD" || a == "add" || a == "REMOVE" || a == "remove"
-                puts 'Please enter ADD or REMOVE'
+        if a.downcase != str1 || a.downcase != str2
+            until a.downcase == str1 || a.downcase == str2
+                puts "\nPlease enter #{str1.upcase} or #{str2.upcase}\n\n"
                 a = gets.chomp 
             end 
         end
-        if a != "ADD" || a != "add"
-            yesfunction
-        elsif a != "REMOVE" || a != "remove"
-            nofunction
+        puts "\n"
+        if  a.downcase == str1
+            true
+        elsif a.downcase == str2
+            false
         end
     end 
+
+    def self.delete_order(order)
+        Order.destroy(order.id)
+        puts "You have successfully deleted your order\n\n"
+    end
 end
