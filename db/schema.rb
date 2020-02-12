@@ -14,7 +14,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_173442) do
 
   create_table "players", force: :cascade do |t|
     t.string "name"
-    t.integer "clues_available"
+    t.integer "clues_available", default: 3
+    t.integer "correct_counter", default: 0
     t.float "score"
   end
 

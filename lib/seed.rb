@@ -1,8 +1,8 @@
 require_relative '../config/environment'
 
-emma = Player.create(name: "Emma")
-carol = Player.create(name: "Carol")
-jenny = Player.create(name: "Jenny")
+# emma = Player.create(name: "Emma")
+# carol = Player.create(name: "Carol")
+# jenny = Player.create(name: "Jenny")
 
 
 def get_questions_hash_for_category(category_number)

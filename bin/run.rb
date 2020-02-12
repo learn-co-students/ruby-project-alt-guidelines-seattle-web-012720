@@ -2,22 +2,16 @@ require_relative '../config/environment'
 
 
 cli = CommandLineInterface.new
-# main_menu
+# cli.start_screen
 # cli.greet
+cli.main_menu_options
 
 
-# cli.challenge
-cli.get_question
-cli.read_question
 
-cli.break
-cli.run
+# cli.get_question
+# cli.read_question
 
-# CLEANING
-# &quot; -- replace with '
-# &#039;s -- replace with '
+# cli.break
+# cli.run
 
-# def clean(hash)
-#     hash.values.each {|value|
-#         value.gsub!("&quot;", "'").gsub!("&#039;", "'")}
-# end
+
