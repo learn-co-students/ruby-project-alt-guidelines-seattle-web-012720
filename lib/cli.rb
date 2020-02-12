@@ -1,8 +1,9 @@
 class Cli
 
     ### initialize function
-    def greet
+    def run
         puts 'Welcome to Sliceline, the best way to order pizza!'
+        Cli.do_you_have_an_order
     end
 
     ### terminate function
@@ -55,11 +56,12 @@ class Cli
         Helper.gets_anwser(Cli.change_order, Cli.end)
     end
     
-    def self.create_pizza 
+    def self.create_pizza(user) 
         number = Helper.num_pizzas
         toppings = Helper.what_toppings(number)
         pizza = Helper.create_pizza(toppings)
-        order = Order.new(user_id: user.id, pizza_id: pizza.id)
+        order = Order.new(user_id: user.id, num_pizzas: number)
+        order.pizzas << pizza
         value1 = Helper.plural(number)
         value2 = Helper.topping_to_s(toppings)
         puts "You have added #{number} pizza#{value1} with \n#{value2} to your order"
@@ -69,7 +71,7 @@ class Cli
     def self.lost_order(user)
         puts "I'm sorry, we are unable to locate an order for #{user.name}."
         puts 'Would you like to place a new order? -- enter (Y/N)'
-        Helper.gets_anwser(Cli.create_pizza, Cli.end)
+        Helper.gets_anwser(Cli.create_pizza(user), Cli.end)
     end
 
     def self.has_order
@@ -77,7 +79,7 @@ class Cli
         user = Helper.fetch_user
         puts 'Looking up your order...'
         order = Order.find_by(user_id: user.id)
-        if order.empty?
+        if order == nil
             Cli.lost_order(user)
         else
             Cli.found_order(order)

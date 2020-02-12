@@ -24,9 +24,9 @@ class Helper
     end
 
     def self.gets_number
-        number = gets.chomp 
-        if !number.i || number < 0
-            until number.i 
+        number = gets.chomp.to_i 
+        if number < 0
+            until number >= 0
                 puts 'Please enter a number greater than zero'
                 number = gets.chomp 
             end 
@@ -58,7 +58,7 @@ class Helper
         puts 'What is your name?'
         name = gets.chomp
         user = User.find_by(name: name)
-        if user.empty?
+        if user == nil
             user = User.create(name: name)
         end
         puts "Hello #{user.name}"
@@ -74,6 +74,7 @@ class Helper
             else 
                 topping_name.concat("#{toppings[index]}, ")
             end
+            index += 1
         end
         topping_name
     end
@@ -81,9 +82,9 @@ class Helper
     def self.what_toppings(number)
         puts "What toppings would you like on your #{number} pizza#{Helper.plural(number)}?"
         answer = gets.chomp
-        toppings = answer.split(/, |, and| and | /).sort()
+        toppings = answer.split(/, and | and |, /).sort()
         toppings.each {|topping| 
-            Topping.create(name: topping) if Topping.find_by(name: topping).empty?
+            Topping.create(name: topping) if Topping.find_by(name: topping) == nil
         }
         toppings
     end
@@ -91,10 +92,11 @@ class Helper
     def self.create_pizza(toppings)
         pizza = Pizza.all.select {|pizza| pizza.toppings == toppings}
         if pizza.empty?
-            name = "A pizza with #{self.topping_to_s(toppings)}"
+            name = "A pizza with #{Helper.topping_to_s(toppings)}"
             pizza = Pizza.create(name: name)
         end
-        pizza.pizza_topping_helper(toppings)
+        topping_objects = Topping.all.select {|topping| toppings.include?(topping.name)}
+        pizza.pizza_topping_helper(topping_objects)
         pizza 
     end
 
