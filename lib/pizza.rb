@@ -7,4 +7,12 @@ class Pizza < ActiveRecord::Base
     def add_topping(topping)
         self.toppings << topping
     end
+
+    def pizza_topping_helper(toppings)
+        index = 0
+        toppings.length.times do 
+            self.toppings << toppings[index]
+            index += 1
+        end
+    end
 end
