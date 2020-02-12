@@ -23,7 +23,7 @@ class Cli
         number = order.num_pizzas
         value1 = Helper.plural(number)
         value2 = Helper.toppings_to_s(order.pizzas.toppings)
-        if number = 0
+        if number == 0
             puts "You have nothing in your order"
         else
             puts "Your order is now: #{number} pizza#{value1} with #{value2}"

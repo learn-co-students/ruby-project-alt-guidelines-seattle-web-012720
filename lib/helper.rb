@@ -11,7 +11,7 @@ class Helper
     def self.gets_answer(yesfunction, nofunction)
         a = gets.chomp
         if a != "Y" || a != "y" || a != "N" || a != "n"
-            until a == a != "Y" || a != "y" || a != "N" || a != "n"
+            until a == "Y" || a == "y" || a == "N" || a == "n"
                 puts 'Please enter Y or N'
                 a = gets.chomp 
             end 
@@ -60,6 +60,7 @@ class Helper
         user = User.find_by(name: name)
         if user.empty?
             user = User.create(name: name)
+        end
         puts "Hello #{user.name}"
         user
     end
@@ -101,7 +102,7 @@ class Helper
         puts 'Would you like to Add or Remove a pizza? -- enter ADD or REMOVE'
         a = gets.chomp
         if a != "ADD" || a != "add" || a != "REMOVE" || a != "remove"
-            until a != "ADD" || a != "add" || a != "REMOVE" || a != "remove"
+            until a == "ADD" || a == "add" || a == "REMOVE" || a == "remove"
                 puts 'Please enter ADD or REMOVE'
                 a = gets.chomp 
             end 
@@ -112,8 +113,4 @@ class Helper
             nofunction
         end
     end 
-
-    def self.print
-
-    end
 end
