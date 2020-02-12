@@ -112,4 +112,8 @@ class Helper
             nofunction
         end
     end 
+
+    def self.print
+
+    end
 end
