@@ -105,7 +105,6 @@ class Resident < ActiveRecord::Base
                 Ghost.move_all_ghosts
                 
                 new_location = Location.find_by(name: room).id
-
                 Resident.miranda.update(location_id: new_location)
 
                 Resident.check_miranda_current_room
@@ -132,7 +131,6 @@ class Resident < ActiveRecord::Base
                 Ghost.move_all_ghosts
 
                 new_location = Location.find_by(name: room).id
-
                 Resident.miranda.update(location_id: new_location)
 
                 Resident.check_miranda_current_room
@@ -144,7 +142,6 @@ class Resident < ActiveRecord::Base
             Ghost.move_all_ghosts
 
             new_location = Location.find_by(name: room).id
-
             Resident.miranda.update(location_id: new_location)
 
             puts "\nYou're now in the #{room}".red
@@ -164,9 +161,11 @@ class Resident < ActiveRecord::Base
         case location
         when "Master Bedroom"
             puts "\nA king sized bed with fresh linnens. A wooden dresser, a bedside ".red
-            puts "table, a lamp, A STRANGE WOMA - nevermind thats a mirror.".red
+            print "table, a lamp, A STRANGE WOMA".red
             sleep(3)
-            puts "There's nothing out of the ordinary here.".red
+            print " - nevermind thats a mirror.".red
+            sleep(3)
+            puts "\nThere's nothing out of the ordinary here.".red
         when "Olivia's Room"
             if Location.find_by(name: "Attic").unlocked == false
                 Location.find_by(name: "Attic").update(unlocked: true)
@@ -183,19 +182,22 @@ class Resident < ActiveRecord::Base
             puts "\nWhile working you heard footsteps.".red
             sleep(2)
 
+            location = Resident.miranda_location
+
             Resident.move_all_residents
+            Resident.miranda.update(location_id: location)
             Ghost.move_all_ghosts
             Resident.check_miranda_current_room
             Ghost.ghosts_attack
         when "Bathroom"
             puts "\nYou pull back the shower curtain in one swift motion.".red
             puts "There's nothing. You exhale and collect your thoughts.".red
-            sleep(3)
+            sleep(2)
             puts "There's nothing out of the ordinary here.".red
         when "Kitchen"
             puts "\nPots and pans bang, dishes and glasses crash. You find".red
             puts "nothing of note, but worry you've made too much of a ruccus.".red
-            sleep(3)
+            sleep(2)
             puts "There's nothing out of the ordinary here.".red
         when "Living Room"
             if Location.find_by(name: "Basement").unlocked == false
@@ -211,7 +213,10 @@ class Resident < ActiveRecord::Base
             puts "\nWhile working you heard footsteps.".red
             sleep(2)
 
+            location = Resident.miranda_location
+
             Resident.move_all_residents
+            Resident.miranda.update(location_id: location)
             Ghost.move_all_ghosts
             Resident.check_miranda_current_room
             Ghost.ghosts_attack

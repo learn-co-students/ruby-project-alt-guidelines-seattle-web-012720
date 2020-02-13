@@ -23,14 +23,16 @@ class Ghost < ActiveRecord::Base
                 Resident.residents_in_room(ghost.location_id).map do |resident|
                     if resident.name == "Miranda"
                         if ghost.name == "Bael"
+                            sleep(3)
                             puts "\nA grotesque figure is standing in a corner of the room. Part".red
                             puts "man, part frog, part, cat. Yet always changing, always shifting.".red
                             puts "Petrified with fear, you can only watch as it approaches. ".red
                             puts "Your vision fades and you lose consciousness.".red
-                            sleep (10)
+                            sleep (8)
                             puts "\nYou wake up with a pounding head. You should probably".red
                             puts "check your sanity.".red
                         else
+                            sleep(3)
                             puts "\nIt's #{ghost.name}! But something is off. Their eyes".red
                             puts "are bloodshot and they look oddly pale. Before you have time to".red
                             puts "to react #{ghost.name} lets out a growl and lunges at you".red
@@ -77,7 +79,6 @@ class Ghost < ActiveRecord::Base
         puts "silence falls over the house.".red
         sleep(10)
         puts "\nLife continues. You win!".cyan
-        puts "Type quit whenever you're ready to exit.".cyan
     end
 
 end

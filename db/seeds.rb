@@ -17,7 +17,7 @@ basement = Location.create(name: "Basement", unlocked: false)
 bael = Ghost.create(name: "Bael", location_id: Location.all.third.id)
 
 # Residents can start anywhere besides the attic or basement
-miranda = Resident.create(name: "Miranda", location_id: Location.all[0].id, sanity: 3, book: false, knowledge: false)
+miranda = Resident.create(name: "Miranda", location_id: Location.all[0].id, sanity: 2, book: false, knowledge: false)
 aaron = Resident.create(name: "Aaron", location_id: rand(Location.all[0].id..Location.all[4].id), sanity: 2)
 olivia = Resident.create(name: "Olivia", location_id: Location.all[0].id, sanity: 2)
 mittens = Resident.create(name: "Mittens", location_id: rand(Location.all[0].id..Location.all[4].id), sanity: 1)

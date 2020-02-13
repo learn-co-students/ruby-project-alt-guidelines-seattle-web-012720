@@ -21,7 +21,7 @@ class CommandLineInterface
                     Location.list_rooms
                 when "list family"
                     Resident.list_family
-                when "where am I"
+                when "where am i"
                     Resident.where_am_i
                 when "check sanity"
                     Resident.sanity
@@ -31,17 +31,17 @@ class CommandLineInterface
                     if Resident.miranda.knowledge
                         (Ghost.find_by name: "Bael").name_reminder
                     else
-                        puts "\n  invalid command, type 'help' to see a list of available commands"
+                        puts "\n  Invalid command, type 'help' to see a list of available commands"
                     end
                 when "banish bael"
                     if Resident.miranda.knowledge && Resident.miranda.book
                         Ghost.banish
                     else
-                        puts "\n  invalid command, type 'help' to see a list of available commands"
+                        puts "\n  Invalid command, type 'help' to see a list of available commands"
                     end
                     exit
                 else
-                    puts "\n  invalid command, type 'help' to see a list of available commands"
+                    puts "\n  Invalid command, type 'help' to see a list of available commands"
                 end
             end
         end
@@ -71,8 +71,8 @@ class CommandLineInterface
     def intro4
         puts "\n\n\n\n\n\n\n"
         puts "\nYou're jolted awake by Olivia violently shaking you. \n".red
-        sleep(3)
-        puts "Mom! There's something else in the house! \n".red
+        sleep(4)
+        puts "Mom! There's something else in the house!".red
     end
 
     def intro
@@ -93,12 +93,12 @@ class CommandLineInterface
         puts "  list rooms\t\t\t:lists all rooms in the house".green
         puts "  list family\t\t\t:lists all family members in the house".green
         puts "Control Miranda".bold
-        puts "  where am I\t\t\t:tells you which room you are in".green
+        puts "  where am i\t\t\t:tells you which room you are in".green
         puts "  check sanity\t\t\t:tells you your current sanity".green
         puts "  move to ____\t\t\t:attemps to move Miranda to a room".green
         puts "  search\t\t\t:searches the room for anything useful".green
         if Resident.miranda.knowledge == true
-            puts "  name\t\t\t\t:tells you the spirit's name".green
+            puts "  name reminder\t\t\t\t:tells you the spirit's name".green
         end
         if Resident.miranda.knowledge && Resident.miranda.book == true
             puts "  banish bael\t\t\t:banishes bael!".green
@@ -109,7 +109,7 @@ class CommandLineInterface
 
     class CommandLineInterfaceError < StandardError
         def message
-          "\n  invalid range of input, type 'help' to see a list of available commands"
+          "\n  Invalid range of input, type 'help' to see a list of available commands"
         end
     end
 end
