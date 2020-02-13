@@ -7,6 +7,8 @@ class Cli
 
     ### initialize function
     def run
+        banner = Api.new.get_programs
+        puts "\n\n#{banner}\n\n"
         str = "Sliceline".colorize(:red)
         puts "\n\nWelcome to #{str}, the best way to order pizza!\n\n"
         Cli.do_you_have_an_order
