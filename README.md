@@ -46,6 +46,7 @@ Player's Statistics Page
 ## Credits
 
 Thank you to...
+
 ... Piotr Murach for his gem <a href="https://github.com/piotrmurach/tty-prompt">TTY-prompt</a>
 
 ... Michael Tierney for the gem <a href="https://github.com/miketierney/artii">artii</a>
