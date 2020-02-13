@@ -3,24 +3,28 @@ class Ghost < ActiveRecord::Base
     has_many :residents, through: :spooks
     belongs_to :locations
 
+    def bael
+        Ghost.find_by(name: "Bael")
+    end
+
     def name_reminder
         puts "\n#{self.name}".red
     end
 
     def self.move_all_ghosts
         Ghost.all.map do |ghost|
-            ghost.location_id = rand(Location.all[0].id..Location.all[6].id)
+            ghost.update(location_id: rand(Location.all[0].id..Location.all[6].id))
         end
     end
 
-    def ghosts_attack
+    def self.ghosts_attack
         Ghost.all.map do |ghost|
-            if residents_in_room(ghost.location_id)
-                residents_in_room(ghost.location_id).map do |resident|
+            if Resident.residents_in_room(ghost.location_id)
+                Resident.residents_in_room(ghost.location_id).map do |resident|
                     if resident.name == "Miranda"
                         if ghost.name == "Bael"
                             puts "\nA grotesque figure is standing in a corner of the room. Part".red
-                            puts "man, part frog, part, cat. Yet always changing and shifting.".red
+                            puts "man, part frog, part, cat. Yet always changing, always shifting.".red
                             puts "Petrified with fear, you can only watch as it approaches. ".red
                             puts "Your vision fades and you lose consciousness.".red
                             sleep (10)
@@ -35,17 +39,21 @@ class Ghost < ActiveRecord::Base
                             puts "check your sanity.".red
                         end
                     end
-                    resident.update(sanity: sanity - ghost.power)
-                    Spook.new(ghost.id, resident.id)
+                    ghost.power.times do
+                        Resident.decrement_counter(:sanity, resident.id)
+                    end
+                    Spook.create(ghost_id: ghost.id, resident_id: resident.id)
                 end
 
-                if residents_in_room(ghost.location_id).any? {|resident| resident.sanity < 1}
+                if Resident.residents_in_room(ghost.location_id).any? { |resident| resident.sanity < 1}
                     Resident.where("sanity < ?", 1).map do |resident|
                         if resident.name == "Miranda"
                             resident.destroy
-                            CommandLineInterface.dead
+                            Resident.dead
                         else
-                            Ghost.new(resident.name, resident.location_id)
+                            Ghost.create(name: resident.name, location_id: resident.location_id)
+                            resident.destroy
+                            sleep(3)
                             puts "\nYou hear a horrible screech that sounds like it".red
                             puts "came from #{resident.name}, followed by a loud thud.".red
                             puts "After several seconds of silence the house rumbles.".red
@@ -53,15 +61,14 @@ class Ghost < ActiveRecord::Base
                             puts "something about their voice sounds off.".red
                         end
                     end
-                    ghost.update(power: power + 1)
+                    Ghost.increment_counter(:power, Ghost.find_by(name: "Bael").id)
                 end
             end
         end
     end
 
     def self.banish
-        Ghost.destroy((Ghost.find_by name: "Bael").id)
-        puts "\n As you chant the strange words the entire house begins to".red
+        puts "\nAs you chant the strange words the entire house begins to".red
         puts "shake. What begins as a soft murmur transforms to an ear piercing".red
         puts "shriek. Bael appears before you. His body rapidly morphs from".red
         puts "the shape of a cat, a toad, a man, and various mixes of each.".red

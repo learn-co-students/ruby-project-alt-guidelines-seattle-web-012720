@@ -9,8 +9,14 @@ class Resident < ActiveRecord::Base
         end
     end
 
+    # helper method that gives the resident instance for miranda
+    def self.miranda
+        Resident.find_by(name: "Miranda")
+    end
+
+    # helper method that gives miranda's location_id
     def self.miranda_location
-        Resident.find_by(name: "Miranda").location_id
+        Resident.miranda.location_id
     end
 
     def self.where_am_i
@@ -19,7 +25,7 @@ class Resident < ActiveRecord::Base
     end
 
     def self.sanity
-        sanity = Resident.find_by(name: "Miranda").sanity
+        sanity = Resident.miranda.sanity
         puts "\nYour sanity is currently #{sanity}".red
         if sanity > 3 
             puts "\nYou're feeling great!".red
@@ -33,8 +39,13 @@ class Resident < ActiveRecord::Base
         end
     end
 
-    def residents_in_room(location)
+    def self.residents_in_room(location)
         residents_in_room = Resident.where(location_id: location)
+    end
+
+    def residents_in_room_no_miranda(location)
+        residents_in_room = Resident.where(location_id: location)
+        residents_in_room = residents_in_room.where("name != 'Miranda'")
     end
 
     def ghosts_in_room(location)
@@ -43,12 +54,26 @@ class Resident < ActiveRecord::Base
 
     def self.move_all_residents
         Resident.all.map do |resident| 
-            resident.location_id = rand(Location.all[0].id..Location.all[4].id)
+            resident.update(location_id: rand(Location.all[0].id..Location.all[4].id))
         end        
     end
 
-    def check_current_room
-
+    def self.check_miranda_current_room
+        if Resident.miranda.residents_in_room_no_miranda(Resident.miranda_location).count > 0
+            Resident.miranda.residents_in_room_no_miranda(Resident.miranda_location).map do |resident|
+                sleep(3)
+                puts "\n#{resident.name} walks into the room. You try to approach each".red
+                puts "other but a mysterious force doesn't let you touch. However, a".red
+                puts "friendly face is a much needed respite during these trying times.".red
+                puts "It appears that you need to do this alone.".red
+                sleep(2)
+                unless Resident.miranda.ghosts_in_room(Resident.miranda_location).count > 0
+                    Resident.increment_counter(:sanity, Resident.miranda.id)
+                    Resident.increment_counter(:sanity, resident.id)
+                    puts "\nYou and #{resident.name} gain 1 sanity.".red
+                end
+            end
+        end
     end
 
     def self.move_to(room)
@@ -72,14 +97,19 @@ class Resident < ActiveRecord::Base
                 puts "All hairs on your body stand on end in unison and you pulse".red
                 puts "skyrockets. After moments of silence you decide the coast is clear".red
                 puts "and jump into the dark room.".red
+                sleep(3)
+                puts "\nYou're now in the #{room}".red
+                puts "However, on your way you heard other footsteps.".red
 
                 Resident.move_all_residents
                 Ghost.move_all_ghosts
                 
-                miranda = Resident.find_by(name: "Miranda")
                 new_location = Location.find_by(name: room).id
 
-                miranda.update(location_id: new_location)
+                Resident.miranda.update(location_id: new_location)
+
+                Resident.check_miranda_current_room
+                Ghost.ghosts_attack
                 return
             end
 
@@ -94,27 +124,34 @@ class Resident < ActiveRecord::Base
                 puts "\nThe key fits! Silence is broken by the tumbling of the deadbolt".red
                 puts "and the door creaking open. You take a deep breath and descend".red
                 puts "into the darkness.".red
+                sleep(3)
+                puts "\nYou're now in the #{room}".red
+                puts "However, on your way you heard other footsteps.".red
 
                 Resident.move_all_residents
                 Ghost.move_all_ghosts
 
-                miranda = Resident.find_by(name: "Miranda")
                 new_location = Location.find_by(name: room).id
 
-                miranda.update(location_id: new_location)
+                Resident.miranda.update(location_id: new_location)
+
+                Resident.check_miranda_current_room
+                Ghost.ghosts_attack
                 return
             end
 
             Resident.move_all_residents
             Ghost.move_all_ghosts
 
-            miranda = Resident.find_by(name: "Miranda")
             new_location = Location.find_by(name: room).id
 
-            miranda.update(location_id: new_location)
+            Resident.miranda.update(location_id: new_location)
 
             puts "\nYou're now in the #{room}".red
             puts "However, on your way you heard other footsteps.".red
+
+            Resident.check_miranda_current_room
+            Ghost.ghosts_attack
 
         else
             puts "\nThat isn't a valid room! You don't have time for this!".red
@@ -130,7 +167,7 @@ class Resident < ActiveRecord::Base
             puts "table, a lamp, A STRANGE WOMA - nevermind thats a mirror.".red
             sleep(3)
             puts "There's nothing out of the ordinary here.".red
-        when "Secondary Bedroom"
+        when "Olivia's Room"
             if Location.find_by(name: "Attic").unlocked == false
                 Location.find_by(name: "Attic").update(unlocked: true)
             end
@@ -140,10 +177,16 @@ class Resident < ActiveRecord::Base
             sleep(3)
             puts "attic is revealed.".red
             sleep(2)
+            puts "\nYou gain 1 sanity.".red
             puts "\nYou can now move to the attic.".red
+            sleep(2)
+            puts "\nWhile working you heard footsteps.".red
+            sleep(2)
 
             Resident.move_all_residents
             Ghost.move_all_ghosts
+            Resident.check_miranda_current_room
+            Ghost.ghosts_attack
         when "Bathroom"
             puts "\nYou pull back the shower curtain in one swift motion.".red
             puts "There's nothing. You exhale and collect your thoughts.".red
@@ -162,11 +205,20 @@ class Resident < ActiveRecord::Base
             puts "After tossing the cushions off of the couch you find an old and rusty".red
             puts "key.".red
             sleep(2)
+            puts "\nYou gain 1 sanity.".red
             puts "\nYou can now move to the basement.".red
+            sleep(2)
+            puts "\nWhile working you heard footsteps.".red
+            sleep(2)
+
+            Resident.move_all_residents
+            Ghost.move_all_ghosts
+            Resident.check_miranda_current_room
+            Ghost.ghosts_attack
         when "Attic"
-            if Resident.find_by(name: "Miranda").knowledge == false
-                Resident.find_by(name: "Miranda").update(knowledge: true)
-                Resident.increment_counter(:sanity, Resident.find_by(name: "Miranda").id)
+            if Resident.miranda.knowledge == false
+                Resident.miranda.update(knowledge: true)
+                Resident.increment_counter(:sanity, Resident.miranda.id)
             end
 
             puts "\nThe air is thick with dust and decay. As you look around the attic".red
@@ -178,9 +230,9 @@ class Resident < ActiveRecord::Base
             sleep(2)
             puts "\nNow you know it's name. You're getting closer.".red
         when "Basement"
-            if Resident.find_by(name: "Miranda").book == false
-                Resident.find_by(name: "Miranda").update(book: true)
-                Resident.increment_counter(:sanity, Resident.find_by(name: "Miranda").id)
+            if Resident.miranda.book == false
+                Resident.miranda.update(book: true)
+                Resident.increment_counter(:sanity, Resident.miranda.id)
             end
 
             puts "\nAfter making your way down the creaky wooden stairs".red
@@ -197,4 +249,13 @@ class Resident < ActiveRecord::Base
         end
     end
 
+    def self.dead
+        puts "\nYou collapse on the floor, still awake but unable to move. What once was".red
+        puts "your family stands above you motionless. You hear a cackling laughter as".red
+        puts "your vision fades.".red
+        sleep(8)
+        puts "\nYou lose!".red
+        sleep(1)
+        exit
+    end
 end
