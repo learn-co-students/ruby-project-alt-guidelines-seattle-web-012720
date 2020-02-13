@@ -53,6 +53,7 @@ class CommandLineInterface
            
          elsif input == '3'
           puts 'Goodbye!'
+          puts ''
            exit
          
          else
@@ -182,6 +183,7 @@ class CommandLineInterface
 
         elsif input2 == '6'
           puts 'Goodbye!'
+          puts ''
           return exit
 
         else
@@ -532,6 +534,7 @@ class CommandLineInterface
             log_in_menu
         elsif x == 3
             puts 'Goodbye!'
+            puts ''
             exit
         else
             puts "Invalid input. Please try again."
