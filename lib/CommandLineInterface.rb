@@ -6,50 +6,51 @@ class CommandLineInterface
 
     def start_screen
         puts ''
-        puts "_________________________________________________"
-        puts "_________________________________________________"
-         puts "  ______           __            __        "
-         puts " /_  __/  _____   / /  _   __   / /  ____ _ "
-         puts "  / /    / ___/  / /  | | / /  / /  / __ `/ "
-         puts " / /    / /     /_/   | |/ /  /_/  / /_/ /  "
-         puts "/_/    /_/     (_)    |___/  (_)   \__,_/   "
+        puts " ____________________________________________________".bold
+        puts " ____________________________________________________".bold
+         puts "     ______           __            __        ".bold
+         puts "    /_  __/  _____   / /  _   __   / /  ____ _ ".bold
+         puts "     / /    / ___/  / /  | | / /  / /  / __ `/ ".bold
+         puts "    / /    / /     /_/   | |/ /  /_/  / /_/ /  ".bold
+         puts "   /_/    /_/     (_)    |___/  (_)   \__,_/   ".bold
          puts ""
-         puts "_________________________________________________"
-         puts "_________________________________________________"
+         puts "___________________________________________________".bold
+         puts "___________________________________________________".bold
          puts " "
          puts ""
-         puts "        Welcome to Tree-va Time!"
+         puts "        Welcome to Tree-va Time!".bold
          puts ''
-         puts "_________________________________________________"
+         puts "__________________________________________________".bold
          puts " "
+         puts ''
      end
      
      def main_menu_options
          system("cls") || system("clear")
          puts ''
-         puts "_________________________________________________"
-         puts "_________________________________________________"
-          puts "  ______           __            __        "
-          puts " /_  __/  _____   / /  _   __   / /  ____ _ "
-          puts "  / /    / ___/  / /  | | / /  / /  / __ `/ "
-          puts " / /    / /     /_/   | |/ /  /_/  / /_/ /  "
-          puts "/_/    /_/     (_)    |___/  (_)   \__,_/   "
+         puts "___________________________________________________".bold
+         puts "___________________________________________________".bold
+          puts "    ______           __            __        ".bold
+          puts "   /_  __/  _____   / /  _   __   / /  ____ _ ".bold
+          puts "    / /    / ___/  / /  | | / /  / /  / __ `/ ".bold
+          puts "   / /    / /     /_/   | |/ /  /_/  / /_/ /  ".bold
+          puts "  /_/    /_/     (_)    |___/  (_)   \__,_/   ".bold
           puts ""
-          puts "_________________________________________________"
-          puts "_________________________________________________"
+          puts "___________________________________________________".bold
+          puts "___________________________________________________".bold
           puts ''
           puts ''
           puts "-----------------------------------------"
-         puts " Available Search Options"
+         puts "  Available Search Options"
          puts "-----------------------------------------"
-         puts "[1] Create Player and Start New Game"
+         puts " [1] Create Player and Start New Game"
          puts ''
-         puts "[2] Log in to Continue Old Game"
+         puts " [2] Log in to Continue Old Game"
          puts ''
-         puts "[3] Exit :("
+         puts " [3] Exit :("
          puts ''
          puts ''
-         puts "Enter your selection:"
+         puts " Enter your selection:"
          input = get_user_input
          if input == "1"
             self.create_player
@@ -563,7 +564,7 @@ class CommandLineInterface
         puts ''
         puts "If you would like to see a list of all the questions you've answered, press '1'.
 
-        Otherwise..."
+        Otherwise, hit ENTER."
         see_questions = get_user_input
         if see_questions == "1"
           i = 1

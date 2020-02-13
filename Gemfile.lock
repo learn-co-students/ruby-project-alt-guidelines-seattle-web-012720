@@ -16,6 +16,7 @@ GEM
     arel (9.0.0)
     artii (2.1.2)
     coderay (1.1.2)
+    colored (1.2)
     concurrent-ruby (1.1.5)
     equatable (0.6.1)
     faker (2.9.0)
@@ -69,6 +70,7 @@ DEPENDENCIES
   activerecord (~> 5.2)
   activerecord-reset-pk-sequence (~> 0.2.0)
   artii (~> 2.1, >= 2.1.2)
+  colored (~> 1.2)
   faker
   pry
   require_all
