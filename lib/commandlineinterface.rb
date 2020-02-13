@@ -55,15 +55,48 @@ class CommandLineInterface
     #            MENU             #
     #          Selection          #
     ###############################
+
+    # def main_menu 
+    #     greet 
+    #     # User.find_or_create(drink_id: )
+
+    #     prompt = TTY::Prompt.new 
+        
+    #     input_0 = prompt.select('Please select an option:') do |menu| 
+    #         menu.choice 'Order a tea', 1 
+    #         menu.choice 'View your order', 2 
+    #         menu.choice 'Cancel your order', 3
+    #         menu.choice 'Today\'s popular drink', 4 
+
+    #     end 
+
+    #         if input_0 == 1
+    #             menu_selection 
+    #         elsif input_0 == 2
+    #             #do this
+
+    #         elsif input_0 == 3
+    #             user.destroy 
+    #         elsif input_0 == 4
+    #                 ###Tea###
+    #                 tea_count = Drink.group(:tea_id).count
+    #                 most = tea_count.max_by{|id, amount| amount}
+    #                 most[0]
+    #                 tea_name = Tea.find(most[0]).name
+                    
+    #                puts "The popular drink of the day is #{tea_name}."
+    #                main_menu 
+    #         end 
+
+    # end 
      
-    def menu_selection_tea_menu 
-        greet 
+    def menu_selection
         prompt = TTY::Prompt.new
         user = User.create()
         name = prompt.ask('What is your name')
-        # drink = Drink.create()
-
         user.name = name 
+
+ 
 
         input_1 = prompt.select('Please select a type of tea') do |menu|
             # menu.default 5
@@ -74,7 +107,7 @@ class CommandLineInterface
             menu.choice 'White Tea', 4
             menu.choice 'Wintermelon', 5
            
-        end
+        end 
       
         if input_1 == 1
             user.create_tea_order(1)
@@ -87,6 +120,9 @@ class CommandLineInterface
         elsif input_1 == 5
             user.create_tea_order(5)
         end 
+     
+    
+    
 
         input_2 = prompt.select('Please select a topping') do |menu|
             menu.default 6
@@ -110,40 +146,35 @@ class CommandLineInterface
         elsif input_2 == 5
             user.create_topping_order(5)
         elsif input_2 == 6
-            #Go to order confirmation
+            #Goes to order confirmation
         end 
 
         input_3 = prompt.select('Please confirm order or select another option') do |menu|
             menu.default 3
             
             menu.choice 'Confirm order', 1
-            menu.choice 'Back to Tea Menu', 2
-            #Build this out if time 
+            menu.choice 'Update Order', 2
             menu.choice 'Cancel Order', 3
         end 
 
         if input_3 == 1
             if input_2 != 6
-            puts "You ordered #{user.drink.tea.name} with #{user.drink.topping.name}"
+                puts "You ordered #{user.drink.tea.name} with #{user.drink.topping.name}"
+                total = user.drink.tea.price + user.drink.topping.price
+                puts "Your total comes out to $#{total}. Thank you for visiting."
             else
                 puts "You ordered #{user.drink.tea.name}."
+                total = user.drink.tea.price 
+                puts "Your total comes out to $#{total}. Thank you for visiting."
             end 
 
         elsif input_3 == 2
             puts "I need to do this"
         elsif input_3 == 3
+            puts "Your order has been cancelled."
             user.destroy 
         end
-        
-
     end 
-         
-
-
-            
-
-
-
-
+    
     ####CLASS END####
     end 

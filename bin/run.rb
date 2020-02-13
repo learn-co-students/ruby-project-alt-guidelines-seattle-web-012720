@@ -4,6 +4,7 @@ require_relative '../config/environment'
 
 cli = CommandLineInterface.new
 
-cli.menu_selection_tea_menu
+# cli.main_menu 
+cli.menu_selection
 #user enters a choice  
 

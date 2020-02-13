@@ -31,9 +31,4 @@ class User < ActiveRecord::Base
     def delete_drink_order
         self.destroy 
     end 
-
-
-
-    
-
 end 
