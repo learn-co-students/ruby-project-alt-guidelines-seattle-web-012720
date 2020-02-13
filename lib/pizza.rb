@@ -14,5 +14,6 @@ class Pizza < ActiveRecord::Base
             self.toppings << toppings[index]
             index += 1
         end
+        self
     end
 end

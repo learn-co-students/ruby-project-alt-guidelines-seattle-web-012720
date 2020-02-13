@@ -1,18 +1,25 @@
 class Cli
+    @@y = "Y".colorize(:red)
+    @@n = "N".colorize(:red)
+    @@b1 = "- enter - ".colorize(:blue) 
+    @@b2 = " or ".colorize(:blue) 
+    @@str = "#{@@b1}#{@@y}#{@@b2}#{@@n}"
 
     ### initialize function
     def run
-        puts "\n\nWelcome to Sliceline, the best way to order pizza!\n\n"
+        str = "Sliceline".colorize(:red)
+        puts "\n\nWelcome to #{str}, the best way to order pizza!\n\n"
         Cli.do_you_have_an_order
     end
 
     ### terminate function
     def self.goodbye
-        puts "\nThanks for using Sliceline!\n\n"
+        str = "Sliceline".colorize(:red)
+        puts "\nThanks for using #{str}!\n\n"
     end
 
     def self.end 
-        puts "Is there anything else we can help you with? -- enter (Y/N)\n\n"
+        puts "Is there anything else we can help you with? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.do_you_have_an_order
@@ -23,18 +30,16 @@ class Cli
 
     ### pizza functions
     def self.remove_pizza(order)
-        puts "How many pizzas would you like to remove? -- enter a number\n\n"
+        str1 = "remove".colorize(:red)
+        str2 = "number".colorize(:red)
+        puts "You have selected #{str1} a pizza"
+        puts "\nEnter the #{str2} of pizzas you would like to remove\n\n"
         number = Helper.remove_pizza(order)
-        puts "You have removed #{number} pizza#{Helper.plural(number)}.\n"
-        number = order.num_pizzas
-        value1 = Helper.plural(number)
-        value2 = Helper.topping_to_s(order.pizzas.first.toppings)
-        if number == 0
-            puts "\nYou have nothing in your order."
-        else
-            puts "\nYour order is now: #{number} pizza#{value1} with #{value2}"
-        end
-        puts "\nWould you like to make any other changes to your order? -- enter (Y/N)\n\n"
+        value1 = number.to_s.colorize(:red)
+        value2 = Helper.plural(number)
+        puts "You have removed #{value1} pizza#{value2}.\n"
+        number = Helper.display_order(order)
+        puts "\nWould you like to make any other changes to your order? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.modify_order(order)
@@ -44,17 +49,23 @@ class Cli
     end
 
     def self.add_pizza(order)
-        puts 'You have selected "ADD a pizza"'
-        puts "\nEnter the number of pizzas you would like to add\n\n"
+        str1 = "ADD".colorize(:red)
+        str2 = "number".colorize(:red)
+        puts "You have selected #{str1} a pizza"
+        puts "\nEnter the #{str2} of pizzas you would like to add\n\n"
         number = Helper.gets_number
         order.num_pizzas += number
+        order.save
+        puts "You have added #{number.to_s.colorize(:red)} pizzas to your order\n\n"
+        Helper.display_order(order)
         Cli.end
     end
 
     ### order functions
 
     def self.change_items_in_order(order)
-        puts "You have selected change items in your order"
+        str = "change".colorize(:red)
+        puts "You have selected #{str} items in your order"
         answer = Helper.comparison_helper('add', 'remove', ' pizza')
         if answer == true
             Cli.add_pizza(order)
@@ -64,8 +75,9 @@ class Cli
     end 
     
     def self.cancel(order)
-        puts "\nYou have selected cancel order"
-        puts "\nDo you wish to proceed with cancelling your order? -- enter (Y/N)"
+        str = "cancel".colorize(:red)
+        puts "\nYou have selected #{str} order"
+        puts "\nDo you wish to proceed with cancelling your order? #{@@str}"
         answer = Helper.gets_answer
         if answer == true
             Helper.delete_order(order)
@@ -85,11 +97,12 @@ class Cli
     end
 
     def self.found_order(order)
-        number = order.num_pizzas 
-        value1 = Helper.plural(number)
-        value2 = Helper.topping_to_s(order.pizzas.first.toppings)
-        puts "\nWe found your order: #{number} pizza#{value1} with \n#{value2}."
-        puts "\nWould you like to modify it? -- enter (Y/N)\n\n"
+        number = order.num_pizzas
+        value1 = number.to_s.colorize(:red)
+        value2 = Helper.plural(number)
+        value3 = Helper.topping_to_s(order.pizzas.first.toppings)
+        puts "\nWe found your order: #{value1} pizza#{value2} with \n#{value3}."
+        puts "\nWould you like to modify it? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.modify_order(order)
@@ -104,15 +117,17 @@ class Cli
         pizza = Helper.create_pizza(toppings)
         order = Order.create(user_id: user.id, num_pizzas: number)
         order.pizzas << pizza
-        value1 = Helper.plural(number)
-        value2 = Helper.topping_to_s(toppings)
-        puts "\nYou have added #{number} pizza#{value1} with \n#{value2} to your order\n\n"
+        topping_objects = Topping.all.select {|topping| toppings.include?(topping.name)}
+        value1 = number.to_s.colorize(:red)
+        value2 = Helper.plural(number)
+        value3 = Helper.topping_to_s(topping_objects)
+        puts "\nYou have added #{value1} pizza#{value2} with \n#{value3} to your order\n\n"
         Cli.end
     end
 
     def self.lost_order(user)
         puts "\nI'm sorry, we are unable to locate an order for #{user.name}."
-        puts "\nWould you like to place a new order? -- enter (Y/N)\n\n"
+        puts "\nWould you like to place a new order? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.create_pizza(user)
@@ -141,7 +156,7 @@ class Cli
 
     def self.no_order
         puts "You have selected No existing order"
-        puts "\nWould you like to create an order? -- enter (Y/N)\n\n"
+        puts "\nWould you like to create an order? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.create_order
@@ -151,7 +166,7 @@ class Cli
     end
 
     def self.do_you_have_an_order
-        puts "Do you have an existing order? -- enter (Y/N)\n\n"
+        puts "Do you have an existing order? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
             Cli.has_order

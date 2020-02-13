@@ -52,7 +52,8 @@ class Helper
     end
 
     def self.num_pizzas
-        puts "\nHow many pizzas would you like? -- enter a number\n\n"
+        str = "-- enter a number".colorize(:blue)
+        puts "\nHow many pizzas would you like? #{str}\n\n"
         Helper.gets_number
     end
 
@@ -67,31 +68,42 @@ class Helper
                 number = Helper.gets_number 
             end
             order.num_pizzas -= number
+            order.save
         end
         number
     end
 
     def self.fetch_user
-        puts "\nWhat is your name?\n\n"
+        str = "name".colorize(:magenta)
+        puts "\nWhat is your #{str}?\n\n"
         name = gets.chomp
         user = User.find_by(name: name)
         if user == nil
             user = User.create(name: name)
         end
-        puts "\nHello #{user.name}\n"
+        puts "\nHello #{user.name.colorize(:magenta)}\n"
         user
     end
 
-    def self.topping_to_s(toppings)
+    def self.topping_to_s(toppings, name= false)
         index = 0
         topping_name = ""
         toppings.length.times do 
+            if name == false 
+                str = toppings[index].name.colorize(:cyan)
+            elsif name == true 
+                str = toppings[index].name
+            end
+            binding.pry
             if toppings.length == 1
-                topping_name.concat("#{toppings[index].name}")
-            elsif index == toppings.length - 1
-                topping_name.concat("and #{toppings[index].name}")
-            else 
-                topping_name.concat("#{toppings[index].name}, ")
+                topping_name.concat("#{str}")
+            end
+            if toppings.length > 1
+                if index == toppings.length - 1
+                    topping_name.concat("and #{str}")
+                else 
+                    topping_name.concat("#{str}, ")
+                end
             end
             index += 1
         end
@@ -99,7 +111,7 @@ class Helper
     end
 
     def self.what_toppings(number)
-        puts "What toppings would you like on your #{number} pizza#{Helper.plural(number)}?\n\n"
+        puts "What toppings would you like on your #{number.to_s.colorize(:red)} pizza#{Helper.plural(number)}?\n\n"
         answer = gets.chomp
         toppings = answer.split(/, and | and |, /).sort()
         toppings.each {|topping| 
@@ -109,22 +121,25 @@ class Helper
     end
 
     def self.create_pizza(toppings)
-        pizza = Pizza.all.select {|pizza| pizza.toppings == toppings}
-        if pizza.empty?
-            name = "A pizza with #{Helper.topping_to_s(toppings)}."
-            pizza = Pizza.create(name: name)
-        end
         topping_objects = Topping.all.select {|topping| toppings.include?(topping.name)}
-        pizza.pizza_topping_helper(topping_objects)
+        pizza = Pizza.all.select {|pizza| pizza.toppings == topping_objects}
+        if pizza.empty?
+            name = "A pizza with #{Helper.topping_to_s(topping_objects, true)}."
+            pizza = Pizza.create(name: name)
+            pizza.pizza_topping_helper(topping_objects)
+        end
         pizza 
     end
 
     def self.comparison_helper(str1, str2, str3)
-        puts "\nWould you like to #{str1.capitalize} or #{str2.capitalize} a#{str3}? -- enter #{str1.upcase} or #{str2.upcase}\n\n"
+        str4 = "- enter - ".colorize(:blue)
+        str5 =" or ".colorize(:blue)
+        str6 = "#{str4}#{str1.upcase.colorize(:red)}#{str5}#{str2.upcase.colorize(:red)}"
+        puts "\nWould you like to #{str1.capitalize} or #{str2.capitalize} a#{str3}? #{str6}\n\n"
         a = gets.chomp
         if a.downcase != str1 || a.downcase != str2
             until a.downcase == str1 || a.downcase == str2
-                puts "\nPlease enter #{str1.upcase} or #{str2.upcase}\n\n"
+                puts "\nPlease enter #{str1.upcase.colorize(:red)} or #{str2.upcase.colorize(:red)}\n\n"
                 a = gets.chomp 
             end 
         end
@@ -138,6 +153,19 @@ class Helper
 
     def self.delete_order(order)
         Order.destroy(order.id)
-        puts "You have successfully deleted your order\n\n"
+        puts "You have successfully cancelled your order\n\n"
+    end
+
+    def self.display_order(order)
+        number = order.num_pizzas
+        if number == 0
+            puts "\nYou have nothing in your order."
+        else
+            value1 = number.to_s.colorize(:red)
+            value2 = Helper.plural(number)
+            value3 = Helper.topping_to_s(order.pizzas.first.toppings)
+            puts "\nYour order is now #{value1} pizza#{value2} with \n#{value3}.\n\n"
+        end
+        number
     end
 end
