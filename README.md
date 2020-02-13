@@ -24,19 +24,19 @@ In some cases, you may be asked to type yes/no. Hitting ENTER will be treated as
 
 ## Preview
 Home Screen
-<img src="./images/homescreen.png" width="800">
+<img src="./images/homescreen.png" width="600">
 
 Log-In Menu for Returning Players
-<img src="./images/mainmenu.png" width="800">
+<img src="./images/mainmenu.png" width="600">
 
 Category Selection
-<img src="./images/selectq.png" width="800">
+<img src="./images/selectq.png" width="600">
 
 Celebration for a Correct Answer
-<img src="./images/winning.png" width="800">
+<img src="./images/winning.png" width="600">
 
 Player's Statistics Page
-<img src="./images/stats.png" width="800">
+<img src="./images/stats.png" width="600">
 
 ## Contributing
 

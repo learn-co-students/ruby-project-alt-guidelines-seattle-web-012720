@@ -4,19 +4,23 @@ class CommandLineInterface
         gets.chomp.downcase
     end
 
+    def show_logo
+      puts ''
+      puts " ____________________________________________________".bold
+      puts " ____________________________________________________".bold
+       puts "     ______           __            __        ".bold
+       puts "    /_  __/  _____   / /  _   __   / /  ____ _ ".bold
+       puts "     / /    / ___/  / /  | | / /  / /  / __ `/ ".bold
+       puts "    / /    / /     /_/   | |/ /  /_/  / /_/ /  ".bold
+       puts "   /_/    /_/     (_)    |___/  (_)   \__,_/   ".bold
+       puts ""
+       puts "___________________________________________________".bold
+       puts "___________________________________________________".bold
+       puts " "
+    end
+
     def start_screen
-        puts ''
-        puts " ____________________________________________________".bold
-        puts " ____________________________________________________".bold
-         puts "     ______           __            __        ".bold
-         puts "    /_  __/  _____   / /  _   __   / /  ____ _ ".bold
-         puts "     / /    / ___/  / /  | | / /  / /  / __ `/ ".bold
-         puts "    / /    / /     /_/   | |/ /  /_/  / /_/ /  ".bold
-         puts "   /_/    /_/     (_)    |___/  (_)   \__,_/   ".bold
-         puts ""
-         puts "___________________________________________________".bold
-         puts "___________________________________________________".bold
-         puts " "
+        self.show_logo
          puts ""
          puts "        Welcome to Tree-va Time!".bold
          puts ''
@@ -27,18 +31,7 @@ class CommandLineInterface
      
      def main_menu_options
          system("cls") || system("clear")
-         puts ''
-         puts "___________________________________________________".bold
-         puts "___________________________________________________".bold
-          puts "    ______           __            __        ".bold
-          puts "   /_  __/  _____   / /  _   __   / /  ____ _ ".bold
-          puts "    / /    / ___/  / /  | | / /  / /  / __ `/ ".bold
-          puts "   / /    / /     /_/   | |/ /  /_/  / /_/ /  ".bold
-          puts "  /_/    /_/     (_)    |___/  (_)   \__,_/   ".bold
-          puts ""
-          puts "___________________________________________________".bold
-          puts "___________________________________________________".bold
-          puts ''
+         self.show_logo
           puts ''
           puts "-----------------------------------------"
          puts "  Available Search Options"
@@ -172,51 +165,6 @@ class CommandLineInterface
         elsif input2 == '3'
             q_attempted = PlayersQuestion.where({player_id: @player.id})
             calculate_stats(q_attempted)
-            # dividend = q_attempted.length
-            # puts "Number of Questions Attempted:  #{dividend}"
-            # divisor = 0
-            # q_attempted.each do |player_question|
-            #   relevant_question_instance = Question.find(player_question.question_id)
-            #   if player_question.chosen_answer == relevant_question_instance.correct_answer
-            #       divisor += 1
-            #       @player.update(correct_counter: divisor)
-            #   end
-            # end
-            # system('cls') || system('clear')
-            # puts '' 
-            # puts '--------------------------------------------------'
-            # puts 'YOUR STATISTICS'
-            # puts '--------------------------------------------------'
-            # puts ''
-            # puts "Number Correct:  #{divisor}"
-            # puts ''
-            # puts "Number Incorrect: #{dividend - divisor}"
-            # puts ''
-            # puts "Clues Used:  #{3 - @player.clues_available}"
-            # puts ''
-            # score = 100 * divisor/dividend.to_f
-            # puts "Overall Score:  #{score.round(2)}%"
-            # puts ''
-            # puts "Judgment of you as a person:"
-            #   if score < 55
-            #       puts "  Oof. Study up."
-            #   elsif score < 85
-            #       puts "  All right, all right, I see you. Nicely done."
-            #   else
-            #       puts "  I salute you, professor! You are indeed a trivia master!"
-            #   end
-            # puts '' 
-            # puts ''
-            # puts "If you would like to see a list of all the questions you've answered, press SPACE.
-            
-            # Otherwise, press ENTER."
-            # see_questions = get_user_input
-            # if see_questions == ' '
-            #   @player.questions.each do |instance|
-            #     puts "#{instance.question}"
-            #   end
-            # elsif see_questions = :enter
-            # end
             
         elsif input2 == '4'
             puts "WARNING: This will delete EVERY record of you and the games you've played previously. Are you sure you want to continue? (Type yes/no)"
@@ -337,6 +285,7 @@ class CommandLineInterface
         @q = @q.gsub('&quot;', "'")
         @q = @q.gsub(/[^a-zA-Z0-9?|\s*]/, '')
         choice_string = @new_question.choices
+        binding.pry
         change_choice_string_to_array(choice_string)
         puts ''
         prompt = TTY::Prompt.new
@@ -359,18 +308,7 @@ class CommandLineInterface
       def get_question
         category = self.select_category
         system("cls") || system("clear")
-        puts ''
-        puts "_________________________________________________"
-        puts "_________________________________________________"
-         puts "  ______           __            __        "
-         puts " /_  __/  _____   / /  _   __   / /  ____ _ "
-         puts "  / /    / ___/  / /  | | / /  / /  / __ `/ "
-         puts " / /    / /     /_/   | |/ /  /_/  / /_/ /  "
-         puts "/_/    /_/     (_)    |___/  (_)   \__,_/   "
-         puts ""
-         puts "_________________________________________________"
-         puts "_________________________________________________"
-         puts " "
+        self.show_logo
          puts ''
         puts '_________________________________________________'
         puts "Here we go. As you requested, a question about #{@choice}."
@@ -579,35 +517,6 @@ class CommandLineInterface
         self.end_game?
       end
 
-
-    #   def calculate(questions_answered)
-    #     dividend = questions_answered.length
-    #     divisor = 0
-    #     questions_answered.each do |player_question|
-    #       relevant_question_instance = Question.find(player_question.question_id)
-    #       if player_question.chosen_answer == relevant_question_instance.correct_answer
-    #         divisor += 1
-    #       end
-    #     end
-    #     score = 100 * (divisor.to_f / dividend.to_f)
-    #     puts ''
-    #     puts '-----------------------------------------------------------'
-    #     puts "You scored a #{score.round(2)}%."
-    #     puts '-----------------------------------------------------------'
-    #     puts ''
-    #     if score < 55
-    #       puts "Oof. Study up."
-    #     elsif score < 85
-    #       puts "All right, all right, I see you. Nicely done."
-    #     else
-    #       puts "WOWSA!"
-    #       puts "I salute you, professor! You are indeed a trivia master!"
-    #     end
-    #     puts ''
-        
-    #     self.end_game?
-    # end
-
     def end_game?
       puts ''
         ending = TTY::Prompt.new
@@ -637,7 +546,6 @@ class CommandLineInterface
         when 1
           self.get_question
         when 2
-          #calculate score
           questions_answered = PlayersQuestion.where(player_id: @player.id)
           calculate_stats(questions_answered)
         end
