@@ -150,11 +150,10 @@ class CommandLineInterface
           end
           case warn
           when true
-            PlayersQuestion.where({player_id: @player.id}).destroy_all
+            PlayersQuestion.where({player_id: @player.id}).delete_all
             @player.update(clues_available: 3)
             @player.update(correct_counter: 0)
-            new_cli = CommandLineInterface.new
-            new_cli.get_question
+            self.get_question
           when false
             self.log_in_menu
           end
@@ -172,8 +171,9 @@ class CommandLineInterface
             answer = get_user_input.downcase
                 if answer == "yes"
                     PlayersQuestion.where(player_id: @player.id).destroy_all
-                    Player.where(player_id: @player.id).destroy_all
+                    Player.where(id: @player.id).destroy_all
                     self.main_menu_options
+                    return
                 elsif answer == 'no'
                     log_in_menu
                 end
@@ -496,8 +496,10 @@ class CommandLineInterface
               puts "  Oof. Study up."
           elsif score < 85
               puts "  All right, all right, I see you. Nicely done."
-          else
+          elsif score >= 85
               puts "  I salute you, professor! You are indeed a trivia master!"
+          else
+            puts "Error"
           end
         puts '' 
         puts ''
