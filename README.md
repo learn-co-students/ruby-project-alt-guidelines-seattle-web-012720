@@ -1,44 +1,35 @@
+Tree-Va Time
 
-### Phase 4: Project Review
-
-When you are ready, schedule a project review with one of your instructors. The format of the review will roughly look like this:
-
-* 3 minutes - Requirements Review
-* 5 minutes - App Overview
-* 6 minutes - Deep Dive
-* 12 minutes - Pair Programming
-* 4 minutes - Feedback
-
------------------------------------------
-* Write a README detailing:
-  * How to install your application.
-  * How to run your application.
-  * How to use your application (commands that can be run).
-  * What your program looks like (screenshots).
-  * etc.
-
-EventFindr
-EventFindr is a simple CLI used to find live entertainment events.
-
-Here's our demo video
+Tree-Va Time was inspired by the infamous typo at a local Vermont bar that was advertising its weekly "Triva Nights".
+This CLI app is a simple one, allowing users to create an account, select questions from a variety of categories, get hints, and ultimately determine just how prepared they might be for the next live taping of Jeopardy!.
 
 Installation
-Run 'bundle install' to install required gems.
 
-bundle install
-Create a file named 'api_key.rb' in the 'config' folder. Obtain an api key from ticketmaster here. Once api key is obtained, assign the key to the global variable '$key' as a string in the 'api_key.rb' file.
+Clone down this project repository by clicking the green "Clone or download" button above. Copy the SSH link, and open up your computer's Terminal. Inside, type "git clone <the link you've just copied>". This should open up the project: You'll see folders labeled "bin", "config", "db", "lib", etc.
 
-Run 'rake db:migrate' in the root directory to create the database locally.
+Back in your terminal, type "bundle install".
+Then, from the root directory, run "rake db:migrate" to create the database locally.
+Lastly, run "rake db:seed". Now you're ready to go!
 
-rake db:migrate
+Running the Application
+
+To begin the game, type "ruby bin/run.rb".
+Good luck!
+
+Playing the Game: Commands
+
+At various points during the game, menus will pop up offering several options. You will either need to use your arrow keys to move up and down; hit ENTER to select an option. Or, you can type the number corresponding to your desired option.
+
+In some cases, you may be asked to type yes/no. Hitting ENTER will be treated as a 'yes'. 
+
+Preview
+
+
+
+
 Contributing
-Contributions are welcome. Feel free to open a pull request or branch from this project.
+
+Contributions are most welcome. This is very much a beginner project, and constructive criticism is appreciated. Feel free to open a pull request or branch from this project.
 
 License
 MIT
-
-* Prepare a demo video describing how a user would interact with your working project.
-    * The video should:
-      * Have an overview of your project. (2 minutes max)
-
-

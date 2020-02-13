@@ -1,5 +1,8 @@
 require_relative '../config/environment'
 
+Question.delete_all
+Question.reset_pk_sequence
+
 # emma = Player.create(name: "Emma")
 # carol = Player.create(name: "Carol")
 # jenny = Player.create(name: "Jenny")
@@ -28,8 +31,12 @@ def parse_questions_hash(questions_hash)
     questions_hash["results"].each do |i|
         i["incorrect_answers"] << i["correct_answer"]
         answers = i["incorrect_answers"]
-        @question = i["question"]
-        @choices = answers.shuffle
+        fixed_answers = answers.map {|answer|
+            answer = answer.gsub("&quot;", "'")
+            answer = answer.gsub("&#039;", "'")}
+        @question = i["question"].gsub("&quot;", "'")
+        @question = @question.gsub("&#039;", "'")
+        @choices = fixed_answers.shuffle
         @correct = i["correct_answer"]
         Question.create(question: @question, category_num: @cat, choices: @choices, correct_answer: @correct)
     end
@@ -46,4 +53,4 @@ def seed_questions_db
     Question.all
 end
 
-# seed_questions_db
+seed_questions_db

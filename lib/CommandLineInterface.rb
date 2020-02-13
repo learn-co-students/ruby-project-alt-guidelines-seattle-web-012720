@@ -55,12 +55,10 @@ class CommandLineInterface
             self.create_player
            
          elsif input == '2'
-            puts ''
-             prompt = TTY::Prompt.new
-             user_name = prompt.ask("Welcome back! Please enter your Player Name:")
-            self.log_in(user_name)
+            self.enter_user
            
          elsif input == '3'
+          puts 'Goodbye!'
            exit
          
          else
@@ -69,6 +67,13 @@ class CommandLineInterface
          end
          return self.main_menu_options
      end
+
+    def enter_user
+      puts ''
+      prompt = TTY::Prompt.new
+      user_name = prompt.ask("Welcome back! Please enter your Player Name:")
+      self.log_in(user_name)
+    end
 
     def greet
       puts "The only true wisdom is in knowing you know nothing."
@@ -100,7 +105,7 @@ class CommandLineInterface
                 menu.choice "Return to the main menu", 2
                 end
             if input == 1
-                self.log_in(user)
+                self.enter_user
             elsif input == 2
                 self.main_menu_options
             else
@@ -142,55 +147,76 @@ class CommandLineInterface
         input2 = get_user_input
 
         if input2 == "1"
-            puts "WARNING: This will delete all your stats and prior questions. Are you sure you want to continue? (Type yes/no)"
-                answer = get_user_input.downcase
-                if answer == "yes"
-                    PlayersQuestion.where({player_id: @player.id}).destroy_all
-                    new_cli = CommandLineInterface.new
-                    new_cli.get_question
-                elsif answer == 'no'
-                    log_in_menu
-                end
-          
+          prompt = TTY::Prompt.new
+          warn = prompt.yes?("WARNING: This will delete all your stats and prior questions. Are you sure you want to continue? (Type yes/no)") do |q|
+            q.default true
+            q.positive 'yes'
+            q.negative 'no'
+          end
+          case warn
+          when true
+            PlayersQuestion.where({player_id: @player.id}).destroy_all
+            @player.update(clues_available: 3)
+            @player.update(correct_counter: 0)
+            new_cli = CommandLineInterface.new
+            new_cli.get_question
+          when false
+            self.log_in_menu
+          end
+            
         elsif input2 == '2'
             @counter = PlayersQuestion.where({player_id: @player.id}).length
             self.challenge
 
         elsif input2 == '3'
             q_attempted = PlayersQuestion.where({player_id: @player.id})
-            dividend = q_attempted.length
-            puts "Number of Questions Attempted:  #{dividend}"
-            divisor = 0
-            q_attempted.each do |player_question|
-              relevant_question_instance = Question.find(player_question.question_id)
-              if player_question.chosen_answer == relevant_question_instance.correct_answer
-                  divisor += 1
-              end
-            end
-            system('cls') || system('clear')
-            puts '' 
-            puts '--------------------------------------------------'
-            puts 'YOUR STATISTICS'
-            puts '--------------------------------------------------'
-            puts ''
-            puts "Number Correct:  #{divisor}"
-            puts ''
-            puts "Number Incorrect #{dividend - divisor}"
-            puts ''
-            score = 100 * divisor/dividend.to_f
-            puts "Overall Score:  #{score.round(2)}%"
-            puts ''
-            puts "Judgment of you as a person:"
-              if score < 55
-                  puts "  Oof. Study up."
-              elsif score < 85
-                  puts "  All right, all right, I see you. Nicely done."
-              else
-                  puts "  I salute you, professor! You are indeed a trivia master!"
-              end
-            puts '' 
-            puts ''
-    
+            calculate_stats(q_attempted)
+            # dividend = q_attempted.length
+            # puts "Number of Questions Attempted:  #{dividend}"
+            # divisor = 0
+            # q_attempted.each do |player_question|
+            #   relevant_question_instance = Question.find(player_question.question_id)
+            #   if player_question.chosen_answer == relevant_question_instance.correct_answer
+            #       divisor += 1
+            #       @player.update(correct_counter: divisor)
+            #   end
+            # end
+            # system('cls') || system('clear')
+            # puts '' 
+            # puts '--------------------------------------------------'
+            # puts 'YOUR STATISTICS'
+            # puts '--------------------------------------------------'
+            # puts ''
+            # puts "Number Correct:  #{divisor}"
+            # puts ''
+            # puts "Number Incorrect: #{dividend - divisor}"
+            # puts ''
+            # puts "Clues Used:  #{3 - @player.clues_available}"
+            # puts ''
+            # score = 100 * divisor/dividend.to_f
+            # puts "Overall Score:  #{score.round(2)}%"
+            # puts ''
+            # puts "Judgment of you as a person:"
+            #   if score < 55
+            #       puts "  Oof. Study up."
+            #   elsif score < 85
+            #       puts "  All right, all right, I see you. Nicely done."
+            #   else
+            #       puts "  I salute you, professor! You are indeed a trivia master!"
+            #   end
+            # puts '' 
+            # puts ''
+            # puts "If you would like to see a list of all the questions you've answered, press SPACE.
+            
+            # Otherwise, press ENTER."
+            # see_questions = get_user_input
+            # if see_questions == ' '
+            #   @player.questions.each do |instance|
+            #     puts "#{instance.question}"
+            #   end
+            # elsif see_questions = :enter
+            # end
+            
         elsif input2 == '4'
             puts "WARNING: This will delete EVERY record of you and the games you've played previously. Are you sure you want to continue? (Type yes/no)"
             answer = get_user_input.downcase
@@ -206,6 +232,7 @@ class CommandLineInterface
             self.main_menu_options
 
         elsif input2 == '6'
+          puts 'Goodbye!'
           return exit
 
         else
@@ -213,7 +240,7 @@ class CommandLineInterface
             self.log_in_menu
         end
         neext = TTY::Prompt.new
-        keystroke = neext.keypress("Hit ENTER or SPACE to return to your home page.", keys: [:space, :return])
+        keystroke = neext.keypress("Hit ENTER to return to your home page.", keys: [:return])
         if keystroke
             self.log_in_menu
         end
@@ -473,7 +500,6 @@ class CommandLineInterface
             puts "Womp, womp. Nope. The correct answer was #{relevant_question_instance[0].correct_answer}."
             puts ''
             puts ''
-            puts ''
         end
         @counter = @counter + 1
         neeext = TTY::Prompt.new
@@ -498,31 +524,91 @@ class CommandLineInterface
         self.run(next_move)
       end
     
-      def calculate(questions_answered)
-        dividend = questions_answered.length
+
+      def calculate_stats(q_attempted)
+        dividend = q_attempted.length
+        puts "Number of Questions Attempted:  #{dividend}"
         divisor = 0
-        questions_answered.each do |player_question|
+        q_attempted.each do |player_question|
           relevant_question_instance = Question.find(player_question.question_id)
           if player_question.chosen_answer == relevant_question_instance.correct_answer
-            divisor += 1
+              divisor += 1
+              @player.update(correct_counter: divisor)
           end
         end
-        score = 100 * (divisor.to_f / dividend.to_f)
-        puts "You scored a #{score.round(2)}%."
-        if score < 55
-          puts "Oof. Study up."
-        elsif score < 85
-          puts "All right, all right, I see you. Nicely done."
-        else
-          puts "WOWSA!"
-          puts "I salute you, professor! You are indeed a trivia master!"
+        system('cls') || system('clear')
+        puts '' 
+        puts '--------------------------------------------------'
+        puts 'YOUR STATISTICS'
+        puts '--------------------------------------------------'
+        puts ''
+        puts "Number Correct:  #{divisor}"
+        puts ''
+        puts "Number Incorrect: #{dividend - divisor}"
+        puts ''
+        puts "Clues Used:  #{3 - @player.clues_available}"
+        puts ''
+        score = 100 * divisor/dividend.to_f
+        puts "Overall Score:  #{score.round(2)}%"
+        puts ''
+        puts "Judgment of you as a person:"
+          if score < 55
+              puts "  Oof. Study up."
+          elsif score < 85
+              puts "  All right, all right, I see you. Nicely done."
+          else
+              puts "  I salute you, professor! You are indeed a trivia master!"
+          end
+        puts '' 
+        puts ''
+        puts "If you would like to see a list of all the questions you've answered, press '1'.
+
+        Otherwise..."
+        see_questions = get_user_input
+        if see_questions == "1"
+          i = 1
+          @player.questions.each do |instance|
+            puts "   #{i}. #{instance.question}"
+            i +=1
+          end
+        elsif see_questions == :enter
         end
         puts ''
-        
+         
         self.end_game?
-    end
+      end
+
+
+    #   def calculate(questions_answered)
+    #     dividend = questions_answered.length
+    #     divisor = 0
+    #     questions_answered.each do |player_question|
+    #       relevant_question_instance = Question.find(player_question.question_id)
+    #       if player_question.chosen_answer == relevant_question_instance.correct_answer
+    #         divisor += 1
+    #       end
+    #     end
+    #     score = 100 * (divisor.to_f / dividend.to_f)
+    #     puts ''
+    #     puts '-----------------------------------------------------------'
+    #     puts "You scored a #{score.round(2)}%."
+    #     puts '-----------------------------------------------------------'
+    #     puts ''
+    #     if score < 55
+    #       puts "Oof. Study up."
+    #     elsif score < 85
+    #       puts "All right, all right, I see you. Nicely done."
+    #     else
+    #       puts "WOWSA!"
+    #       puts "I salute you, professor! You are indeed a trivia master!"
+    #     end
+    #     puts ''
+        
+    #     self.end_game?
+    # end
 
     def end_game?
+      puts ''
         ending = TTY::Prompt.new
         x = ending.select("Hit ENTER to return to the main menu, or use the menu below to select a different option.") do |menu|
             menu.enum "."
@@ -536,6 +622,7 @@ class CommandLineInterface
         elsif x == 2
             log_in_menu
         elsif x == 3
+            puts 'Goodbye!'
             exit
         else
             puts "Invalid input. Please try again."
@@ -551,7 +638,7 @@ class CommandLineInterface
         when 2
           #calculate score
           questions_answered = PlayersQuestion.where(player_id: @player.id)
-          calculate(questions_answered)
+          calculate_stats(questions_answered)
         end
       end
 
@@ -562,7 +649,7 @@ class CommandLineInterface
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
             choice = choice.gsub('&quot;', "'")
-            choice.gsub!(/[^a-zA-Z0-9?\/|\s*]/, '').strip} 
+            choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '').strip} 
       end
 
       def end_game

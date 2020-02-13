@@ -9,3 +9,4 @@ gem "require_all"
 gem "faker"
 gem 'tty-prompt', '~> 0.20.0'
 gem 'artii', '~> 2.1', '>= 2.1.2'
+gem 'activerecord-reset-pk-sequence', '~> 0.2.0'
