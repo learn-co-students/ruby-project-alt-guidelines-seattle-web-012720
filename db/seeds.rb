@@ -42,6 +42,7 @@ dave = User.create(name:"Dave", drink_id: random_drink)
 
 
 
+
 #Drinks
 
 random_topping = Topping.all.sample.id 
