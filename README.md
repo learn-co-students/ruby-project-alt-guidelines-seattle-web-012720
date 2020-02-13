@@ -24,19 +24,35 @@ In some cases, you may be asked to type yes/no. Hitting ENTER will be treated as
 
 ## Preview
 Home Screen
+<br /> 
 <img src="./images/homescreen.png" width="600">
 
 Log-In Menu for Returning Players
+<br /> 
 <img src="./images/mainmenu.png" width="600">
 
 Category Selection
+<br /> 
 <img src="./images/selectq.png" width="600">
 
 Celebration for a Correct Answer
+<br /> 
 <img src="./images/winning.png" width="600">
 
 Player's Statistics Page
+<br /> 
 <img src="./images/stats.png" width="600">
+
+## Credits
+
+Thank you to...
+... Piotr Murach for his gem <a href="https://github.com/piotrmurach/tty-prompt">TTY-prompt</a>
+
+... Michael Tierney for the gem <a href="https://github.com/miketierney/artii">artii</a>
+
+... Francisco Juan for the gem <a href="https://github.com/fjuan/activerecord_reset_pk_sequence">reset-pk-sequence</a>
+
+... Chris Wanstrath for the gem <a href="https://github.com/defunkt/colored">colored</a>
 
 ## Contributing
 
