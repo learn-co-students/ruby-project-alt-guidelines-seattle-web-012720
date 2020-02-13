@@ -285,7 +285,6 @@ class CommandLineInterface
         @q = @q.gsub('&quot;', "'")
         @q = @q.gsub(/[^a-zA-Z0-9?|\s*]/, '')
         choice_string = @new_question.choices
-        binding.pry
         change_choice_string_to_array(choice_string)
         puts ''
         prompt = TTY::Prompt.new
