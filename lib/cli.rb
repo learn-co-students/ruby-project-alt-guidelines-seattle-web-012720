@@ -1,4 +1,6 @@
 class Cli
+
+    ### class symbols to add color to text
     @@y = "Y".colorize(:red)
     @@n = "N".colorize(:red)
     @@b1 = "- enter - ".colorize(:blue) 
@@ -40,7 +42,7 @@ class Cli
         value1 = number.to_s.colorize(:red)
         value2 = Helper.plural(number)
         puts "You have removed #{value1} pizza#{value2}.\n"
-        number = Helper.display_order(order)
+        Helper.display_order(order)
         puts "\nWould you like to make any other changes to your order? #{@@str}\n\n"
         answer = Helper.gets_answer
         if answer == true
@@ -51,16 +53,19 @@ class Cli
     end
 
     def self.add_pizza(order)
-        str1 = "ADD".colorize(:red)
-        str2 = "number".colorize(:red)
-        puts "You have selected #{str1} a pizza"
-        puts "\nEnter the #{str2} of pizzas you would like to add\n\n"
+        Helper.add_pizza
         number = Helper.gets_number
         order.num_pizzas += number
         order.save
         puts "You have added #{number.to_s.colorize(:red)} pizzas to your order\n\n"
         Helper.display_order(order)
-        Cli.end
+        puts "\nWould you like to make any other changes to your order? #{@@str}\n\n"
+        answer = Helper.gets_answer
+        if answer == true
+            Cli.modify_order(order)
+        elsif answer == false 
+            Cli.end
+        end 
     end
 
     ### order functions
@@ -88,7 +93,8 @@ class Cli
     end 
     
     def self.modify_order(order)
-        puts "You have selected modify order"
+        str = "modify".colorize(:red)
+        puts "You have selected #{str} order"
         answer = Helper.comparison_helper('change', 'cancel', 'n order')
         if answer == true
             Cli.change_items_in_order(order)

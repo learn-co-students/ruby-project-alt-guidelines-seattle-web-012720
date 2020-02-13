@@ -52,8 +52,9 @@ class Helper
     end
 
     def self.num_pizzas
-        str = "-- enter a number".colorize(:blue)
-        puts "\nHow many pizzas would you like? #{str}\n\n"
+        str1 = "- enter - a ".colorize(:blue)
+        str2 = "number".colorize(:red)
+        puts "\nHow many pizzas would you like? #{str1}#{str2}\n\n"
         Helper.gets_number
     end
 
@@ -94,7 +95,6 @@ class Helper
             elsif name == true 
                 str = toppings[index].name
             end
-            binding.pry
             if toppings.length == 1
                 topping_name.concat("#{str}")
             end
@@ -153,7 +153,8 @@ class Helper
 
     def self.delete_order(order)
         Order.destroy(order.id)
-        puts "You have successfully cancelled your order\n\n"
+        str = "cancelled".colorize(:red)
+        puts "You have successfully #{str} your order\n\n"
     end
 
     def self.display_order(order)
@@ -167,5 +168,12 @@ class Helper
             puts "\nYour order is now #{value1} pizza#{value2} with \n#{value3}.\n\n"
         end
         number
+    end
+
+    def self.add_pizza 
+        str1 = "ADD".colorize(:red)
+        str2 = "number".colorize(:red)
+        puts "You have selected #{str1} a pizza"
+        puts "\nEnter the #{str2} of pizzas you would like to add\n\n"
     end
 end
