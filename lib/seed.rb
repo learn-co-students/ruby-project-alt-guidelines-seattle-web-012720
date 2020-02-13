@@ -6,7 +6,7 @@ require_relative '../config/environment'
 
 
 def get_questions_hash_for_category(category_number)
-    url = "https://opentdb.com/api.php?amount=15&category=#{category_number}&difficulty=medium&type=multiple"
+    url = "https://opentdb.com/api.php?amount=25&category=#{category_number}&difficulty=medium&type=multiple"
     uri = URI.parse(url)
     response = Net::HTTP.get_response(uri)
     questions = JSON.parse(response.body)

@@ -115,6 +115,13 @@ class CommandLineInterface
     def log_in_menu
         system("cls") || system("clear")
          puts ''
+         puts "__          __  _                            ____             _    "
+         puts "\ \        / / | |                          |  _ \           | |   "
+         puts " \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_) | __ _  ___| | __"
+         puts "  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ |  _ < / _` |/ __| |/ /"
+         puts "   \  /\  /  __/ | (__ (_) | | | | | |  __/ | |_) | (_| | (__|   < "
+         puts "    \/  \/ \___|_|\___\___/|_| |_| |_|\___| |____/ \__,_|\___|_|\_\""
+         puts ''
          puts "-----------------------------------------"
         puts " Available Search Options"
         puts "-----------------------------------------"
@@ -126,7 +133,9 @@ class CommandLineInterface
         puts ''
         puts "[4] Delete Account"
         puts ''
-        puts "[5] Exit :("
+        puts "[5] Return to Main Menu"
+        puts ''
+        puts "[6] Exit :("
         puts ''
         puts ''
         puts "Enter your selection:"
@@ -149,36 +158,38 @@ class CommandLineInterface
 
         elsif input2 == '3'
             q_attempted = PlayersQuestion.where({player_id: @player.id})
-
-                puts "Number of Questions Attempted:"
-                dividend = q_attempted.length
-                puts dividend
-    
-                puts "Number Correct"
-                divisor = 0
-                q_attempted.each do |player_question|
-                  relevant_question_instance = Question.find(player_question.question_id)
-                  if player_question.chosen_answer == relevant_question_instance.correct_answer
-                    divisor += 1
-                  end
-                end
-                puts divisor
-    
-                puts "Number Incorrect"
-                puts dividend - divisor
-    
-                puts "Overall Score"
-                score = 100 * ((divisor / dividend).to_f)
-                puts score.floor(2)
-    
-                puts "Judgment of you as a person:"
-                if score < 55
-                  puts "Oof. Study up."
-                elsif score < 85
-                  puts "All right, all right, I see you. Nicely done."
-                else
-                  puts "I salute you, professor! You are indeed a trivia master!"
-                end
+            dividend = q_attempted.length
+            puts "Number of Questions Attempted:  #{dividend}"
+            divisor = 0
+            q_attempted.each do |player_question|
+              relevant_question_instance = Question.find(player_question.question_id)
+              if player_question.chosen_answer == relevant_question_instance.correct_answer
+                  divisor += 1
+              end
+            end
+            system('cls') || system('clear')
+            puts '' 
+            puts '--------------------------------------------------'
+            puts 'YOUR STATISTICS'
+            puts '--------------------------------------------------'
+            puts ''
+            puts "Number Correct:  #{divisor}"
+            puts ''
+            puts "Number Incorrect #{dividend - divisor}"
+            puts ''
+            score = 100 * divisor/dividend.to_f
+            puts "Overall Score:  #{score.round(2)}%"
+            puts ''
+            puts "Judgment of you as a person:"
+              if score < 55
+                  puts "  Oof. Study up."
+              elsif score < 85
+                  puts "  All right, all right, I see you. Nicely done."
+              else
+                  puts "  I salute you, professor! You are indeed a trivia master!"
+              end
+            puts '' 
+            puts ''
     
         elsif input2 == '4'
             puts "WARNING: This will delete EVERY record of you and the games you've played previously. Are you sure you want to continue? (Type yes/no)"
@@ -192,12 +203,20 @@ class CommandLineInterface
                 end
     
         elsif input2 == '5'
-            exit
+            self.main_menu_options
+
+        elsif input2 == '6'
+          return exit
+
         else
             puts "Invalid entry, please press enter to try again."
-            gets
+            self.log_in_menu
         end
-          return log_in_menu
+        neext = TTY::Prompt.new
+        keystroke = neext.keypress("Hit ENTER or SPACE to return to your home page.", keys: [:space, :return])
+        if keystroke
+            self.log_in_menu
+        end
     end
     
     
@@ -302,9 +321,9 @@ class CommandLineInterface
           menu.choice @choices[3]
           menu.choice 'Heeelp. Make this easier, please.', "e"
         end
-        # if @final_choice == "e"
-        #     use_clue(@player)
-        # end
+        if @final_choice == "e"
+            use_clue(@player)
+        end
         self.confirm_submit_answer
         
       end
@@ -340,39 +359,33 @@ class CommandLineInterface
 
       def associate_player_and_question(question)
         PlayersQuestion.create({player_id: @player.id, question_id: question.id})
-        # options.reject { |i| i == @new_question.id }
-        # read_question
       end
 
-    #   def use_clue(player)
-    #     if player.clues_available == 0
-    #         puts "Sorry, you used all your hints."
-    #         choice = prompt.select(@q) do |menu|
-    #             menu.enum "."
-    #             menu.choice @choices[0]
-    #             menu.choice @choices[1]
-    #             menu.choice @choices[2]
-    #             menu.choice @choices[3]
-    #         end
-    #     else
-    #         new_clues = @player.clues_available - 1
-    #         @player.update(clues_available: new_clues)
-    #         puts "You've chosen to get a hint. One answer will be eliminated. You have #{new_clues} clues left."
-    #         ##eliminate answer and reprint options
-
-    #         to_edit = Question.find_by(id: @new_question.id)
-    #         choices_string_to_shorten = to_edit.choices
-    #         @choices = change_choice_string_to_array(choices_string_to_shorten)
-    #         @choices.pop if @choices.last != to_edit.correct_answer
-    #         to_edit.choices.shift
-    #         choice = prompt.select(@q) do |menu|
-    #             menu.enum "."
-    #             menu.choice @choices[0]
-    #             menu.choice @choices[1]
-    #             menu.choice @choices[2]
-    #         end
-    #     end
-    #   end
+      def use_clue(player)
+        if !player.clues_available
+            puts "Sorry, you used all your hints."
+              self.read_question
+        else
+            new_clues = @player.clues_available - 1
+            @player.update(clues_available: new_clues)
+            puts "You've chosen to get a hint. One answer will be eliminated. You have #{new_clues} clues left."
+        end
+        choices_string_to_shorten = @new_questions.choices
+        @choices = change_choice_string_to_array(choices_string_to_shorten)
+        if @choices.last != @new_question.correct_answer
+            @choices.pop 
+        else
+            @choices.shift
+        end
+        prompt = TTY::Prompt.new
+        @final_choice = prompt.select(@q) do |menu|
+            menu.enum "."
+            puts ''
+            menu.choice @choices[0]
+            menu.choice @choices[1]
+            menu.choice @choices[2]
+            end
+      end
 
       def confirm_submit_answer
         puts ''
@@ -400,8 +413,8 @@ class CommandLineInterface
       end
 
       def determine_correct_or_not
-        relevant_question_instance = Question.find(@new_question.id)
-        if relevant_question_instance.correct_answer == @final_choice
+        relevant_question_instance = Question.where(id: @new_question.id)
+        if relevant_question_instance[0].correct_answer == @final_choice
         puts ''
         puts ''
         puts " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'              `$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ " 
@@ -457,7 +470,7 @@ class CommandLineInterface
             puts "                                      \"$$$\"\"\"\""
             puts ''
             puts''
-            puts "Womp, womp. Nope. The correct answer was #{relevant_question_instance.correct_answer}."
+            puts "Womp, womp. Nope. The correct answer was #{relevant_question_instance[0].correct_answer}."
             puts ''
             puts ''
             puts ''
@@ -495,7 +508,7 @@ class CommandLineInterface
           end
         end
         score = 100 * (divisor.to_f / dividend.to_f)
-        puts "You scored a #{score}%."
+        puts "You scored a #{score.rounmd(2)}%."
         if score < 55
           puts "Oof. Study up."
         elsif score < 85
