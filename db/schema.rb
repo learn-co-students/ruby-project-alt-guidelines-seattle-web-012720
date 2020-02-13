@@ -10,20 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_181834) do
+ActiveRecord::Schema.define(version: 2020_02_13_000830) do
 
   create_table "ghosts", force: :cascade do |t|
     t.string "name"
     t.integer "location_id"
+    t.integer "power", default: 1
   end
 
   create_table "locations", force: :cascade do |t|
     t.string "name"
+    t.boolean "unlocked"
   end
 
   create_table "residents", force: :cascade do |t|
     t.string "name"
     t.integer "location_id"
+    t.integer "sanity"
+    t.boolean "book"
+    t.boolean "knowledge"
   end
 
   create_table "spooks", force: :cascade do |t|

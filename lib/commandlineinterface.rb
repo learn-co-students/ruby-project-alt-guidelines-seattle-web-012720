@@ -22,7 +22,23 @@ class CommandLineInterface
                 when "list family"
                     Resident.list_family
                 when "where am I"
-                    Location.where_am_i
+                    Resident.where_am_i
+                when "check sanity"
+                    Resident.sanity
+                when "search"
+                    Resident.search
+                when "name reminder"
+                    if Resident.find_by(name: "Miranda").knowledge
+                        (Ghost.find_by name: "Bael").name_reminder
+                    else
+                        puts "\n  invalid command, type 'help' to see a list of available commands"
+                    end
+                when "banish bael"
+                    if Resident.find_by(name: "Miranda").knowledge && Resident.find_by(name: "Miranda").book
+                        Ghost.banish
+                    else
+                        puts "\n  invalid command, type 'help' to see a list of available commands"
+                    end
                 else
                     puts "\n  invalid command, type 'help' to see a list of available commands"
                 end
@@ -77,10 +93,28 @@ class CommandLineInterface
         puts "  list family\t\t\t:lists all family members in the house".green
         puts "Control Miranda".bold
         puts "  where am I\t\t\t:tells you which room you are in".green
+        puts "  check sanity\t\t\t:tells you your current sanity".green
         puts "  move to ____\t\t\t:attemps to move Miranda to a room".green
         puts "  search\t\t\t:searches the room for anything useful".green
+        if Resident.find_by(name: "Miranda").knowledge == true
+            puts "  name\t\t\t\t:tells you the spirit's name".green
+        end
+        if Resident.find_by(name: "Miranda").knowledge && Resident.find_by(name: "Miranda").book == true
+            puts "  banish bael\t\t\t:banishes bael!".green
+        end
         puts "Quit".bold
         puts "  quit\t\t\t\t:quit the program".green
+    end
+
+    def self.dead
+        puts "You collapse on the floor, still awake but unable to move. What once was".red
+        puts "your family stands above you motionless. You hear a cackling laughter as".red
+        puts "your vision fades.".red
+        Resident.find_by(name: "Miranda").destroy
+        sleep(8)
+        puts "You lose!".red
+        sleep(1)
+        input = "quit"
     end
 
     class CommandLineInterfaceError < StandardError
@@ -88,6 +122,4 @@ class CommandLineInterface
           "\n  invalid range of input, type 'help' to see a list of available commands"
         end
     end
-
-
 end
