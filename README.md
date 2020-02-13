@@ -17,20 +17,28 @@ When you are ready, schedule a project review with one of your instructors. The 
   * What your program looks like (screenshots).
   * etc.
 
+EventFindr
+EventFindr is a simple CLI used to find live entertainment events.
+
+Here's our demo video
+
+Installation
+Run 'bundle install' to install required gems.
+
+bundle install
+Create a file named 'api_key.rb' in the 'config' folder. Obtain an api key from ticketmaster here. Once api key is obtained, assign the key to the global variable '$key' as a string in the 'api_key.rb' file.
+
+Run 'rake db:migrate' in the root directory to create the database locally.
+
+rake db:migrate
+Contributing
+Contributions are welcome. Feel free to open a pull request or branch from this project.
+
+License
+MIT
 
 * Prepare a demo video describing how a user would interact with your working project.
     * The video should:
       * Have an overview of your project. (2 minutes max)
-
-
-* Prepare a presentation to follow your video. (3 minutes max)
-    * Your presentation should:
-      * Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      * Discuss 3 things you learned in the process of working on this project.
-      * Address, if anything, what you would change or add to what you have today?
-      * Present any code you would like to highlight.
-
-      
-* Write a blog post about the project and process.
 
 

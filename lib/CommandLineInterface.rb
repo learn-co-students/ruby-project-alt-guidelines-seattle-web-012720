@@ -115,12 +115,12 @@ class CommandLineInterface
     def log_in_menu
         system("cls") || system("clear")
          puts ''
-         puts "__          __  _                            ____             _    "
-         puts "\ \        / / | |                          |  _ \           | |   "
-         puts " \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_) | __ _  ___| | __"
-         puts "  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ |  _ < / _` |/ __| |/ /"
-         puts "   \  /\  /  __/ | (__ (_) | | | | | |  __/ | |_) | (_| | (__|   < "
-         puts "    \/  \/ \___|_|\___\___/|_| |_| |_|\___| |____/ \__,_|\___|_|\_\""
+         puts "_       __     __                             ____             __  "
+         puts "| |     / /__  / /________  ____ ___  ___     / __ )____ ______/ /__"
+         puts "| | /| / / _ \\/ / ___/ __ \\/ __ `__ \\/ _ \\   / __  / __ `/ ___/ //_/"
+         puts "| |/ |/ /  __/ / /__/ /_/ / / / / / /  __/  / /_/ / /_/ / /__/ ,<   "
+         puts "|__/|__/\\___/_/\\___/\\____/_/ /_/ /_/\\___/  /_____/\\__,_/\\___/_/|_|  "
+                                                                            
          puts ''
          puts "-----------------------------------------"
         puts " Available Search Options"
@@ -273,7 +273,7 @@ class CommandLineInterface
         prompt = TTY::Prompt.new
         @choice = prompt.select("Pick your poison: Select the category from which you'd like to answer a question: (Use ↑/↓ arrow or number (1-10) keys, press Enter to select.)
         
-        ", per_page: 10) do |menu|
+        ", per_page: 10, cycle:true) do |menu|
           menu.enum "."
 
           menu.choice "Books"
@@ -370,7 +370,7 @@ class CommandLineInterface
             @player.update(clues_available: new_clues)
             puts "You've chosen to get a hint. One answer will be eliminated. You have #{new_clues} clues left."
         end
-        choices_string_to_shorten = @new_questions.choices
+        choices_string_to_shorten = @new_question.choices
         @choices = change_choice_string_to_array(choices_string_to_shorten)
         if @choices.last != @new_question.correct_answer
             @choices.pop 
@@ -508,7 +508,7 @@ class CommandLineInterface
           end
         end
         score = 100 * (divisor.to_f / dividend.to_f)
-        puts "You scored a #{score.rounmd(2)}%."
+        puts "You scored a #{score.round(2)}%."
         if score < 55
           puts "Oof. Study up."
         elsif score < 85
