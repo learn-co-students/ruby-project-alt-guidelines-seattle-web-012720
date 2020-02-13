@@ -4,6 +4,7 @@ require_relative '../config/environment'
 
 
 class CommandLineInterface 
+
     ###############################
     #          GREETINGS          #
     #                             #
@@ -56,50 +57,20 @@ class CommandLineInterface
     #          Selection          #
     ###############################
 
-    # def main_menu 
-    #     greet 
-    #     # User.find_or_create(drink_id: )
-
-    #     prompt = TTY::Prompt.new 
-        
-    #     input_0 = prompt.select('Please select an option:') do |menu| 
-    #         menu.choice 'Order a tea', 1 
-    #         menu.choice 'View your order', 2 
-    #         menu.choice 'Cancel your order', 3
-    #         menu.choice 'Today\'s popular drink', 4 
-
-    #     end 
-
-    #         if input_0 == 1
-    #             menu_selection 
-    #         elsif input_0 == 2
-    #             #do this
-
-    #         elsif input_0 == 3
-    #             user.destroy 
-    #         elsif input_0 == 4
-    #                 ###Tea###
-    #                 tea_count = Drink.group(:tea_id).count
-    #                 most = tea_count.max_by{|id, amount| amount}
-    #                 most[0]
-    #                 tea_name = Tea.find(most[0]).name
-                    
-    #                puts "The popular drink of the day is #{tea_name}."
-    #                main_menu 
-    #         end 
-
-    # end 
-     
-    def menu_selection
+      
+    def tea_selection(user)
+        greet 
+       
         prompt = TTY::Prompt.new
-        user = User.create()
-        name = prompt.ask('What is your name')
-        user.name = name 
 
- 
+        def ask_for_a_name 
+            name = prompt.ask('What is your name?')
+            prompt = TTY::Prompt.new
+            user.name = name 
+        end 
+  
 
         input_1 = prompt.select('Please select a type of tea') do |menu|
-            # menu.default 5
           puts "----------------"
             menu.choice 'Green Tea', 1
             menu.choice 'Black Tea', 2
@@ -108,7 +79,7 @@ class CommandLineInterface
             menu.choice 'Wintermelon', 5
            
         end 
-      
+
         if input_1 == 1
             user.create_tea_order(1)
         elsif input_1 == 2
@@ -120,10 +91,8 @@ class CommandLineInterface
         elsif input_1 == 5
             user.create_tea_order(5)
         end 
-     
-    
-    
 
+        prompt = TTY::Prompt.new
         input_2 = prompt.select('Please select a topping') do |menu|
             menu.default 6
             
@@ -146,35 +115,50 @@ class CommandLineInterface
         elsif input_2 == 5
             user.create_topping_order(5)
         elsif input_2 == 6
-            #Goes to order confirmation
         end 
+    end 
+
+
+    def order_confirmation(user)
+        prompt = TTY::Prompt.new
 
         input_3 = prompt.select('Please confirm order or select another option') do |menu|
-            menu.default 3
+            menu.default 1 
             
             menu.choice 'Confirm order', 1
             menu.choice 'Update Order', 2
             menu.choice 'Cancel Order', 3
         end 
 
+        
+
         if input_3 == 1
-            if input_2 != 6
-                puts "You ordered #{user.drink.tea.name} with #{user.drink.topping.name}"
+            if user.drink.topping_id != nil
+                puts "You ordered #{user.drink.tea.name} with #{user.drink.topping.name}."
                 total = user.drink.tea.price + user.drink.topping.price
-                puts "Your total comes out to $#{total}. Thank you for visiting."
+                puts "Your total comes out to $#{total}0. Thank you for visiting."
             else
                 puts "You ordered #{user.drink.tea.name}."
                 total = user.drink.tea.price 
-                puts "Your total comes out to $#{total}. Thank you for visiting."
+                puts "Your total comes out to $#{total}0. Thank you for visiting."
             end 
 
         elsif input_3 == 2
-            puts "I need to do this"
+           tea_selection(user) 
+           confirm_w_update
         elsif input_3 == 3
             puts "Your order has been cancelled."
             user.destroy 
         end
+
+
     end 
+
+    def confirm_w_update
+        order_confirmation(user)
+    end 
+
+    
     
     ####CLASS END####
     end 

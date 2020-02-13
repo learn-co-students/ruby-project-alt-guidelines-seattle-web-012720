@@ -6,8 +6,9 @@ class User < ActiveRecord::Base
     #As a user, I want to create a tea order
 
     def create_tea_order(tea_id)
-        new_drink = Drink.create(tea_id: tea_id) 
-        self.drink_id = new_drink.id
+            new_drink = Drink.create(tea_id: tea_id) 
+            self.drink_id = new_drink.id
+            self.save 
     end 
 
  
@@ -17,6 +18,12 @@ class User < ActiveRecord::Base
     def create_topping_order(topping_id) 
         current_drink = Drink.find(self.drink_id)
         current_drink.update(topping_id: topping_id)
+    end 
+
+    #As a user, I want to update the tea
+    def update_tea_order(tea_id) 
+        current_drink = Drink.find(self.drink_id)
+        current_drink.update(tea_id: tea_id)
     end 
 
     #User views drink

@@ -32,14 +32,14 @@ class Drink < ActiveRecord::Base
     def self.popular_tea 
         tea_count = self.group(:tea_id).count
         most = tea_count.max_by{|id, amount| amount}
-        puts "#{most[0]}"
+        most[0]
     end 
 
     # most popular topping  (returns id)
     def self.popular_topping 
         topping_count = self.group(:topping_id).count
         most = topping_count.max_by{|id, amount| amount}
-        puts "#{most[0]}" 
+        most[0]
     end 
 
 
