@@ -6,34 +6,34 @@ class CommandLineInterface
         while true
             puts "\nType 'help' to see the list of available commands. Type 'quit' to exit.".magenta
             print "Enter command: ".cyan
-            input = gets.chomp
+            input = gets.chomp.upcase.titleize
 
-            break if input == "quit"
+            break if input == "Quit"
 
             if input.include?("move to ")
                 room = input.split("move to ")
                 Resident.move_to(room[1])
             else
                 case input
-                when "help"
+                when "Help"
                     help
-                when "list rooms"
+                when "List Rooms"
                     Location.list_rooms
-                when "list family"
+                when "List Family"
                     Resident.list_family
-                when "where am i"
+                when "Where Am I"
                     Resident.where_am_i
-                when "check sanity"
+                when "Check Sanity"
                     Resident.sanity
-                when "search"
+                when "Search"
                     Resident.search
-                when "name reminder"
+                when "Name Reminder"
                     if Resident.miranda.knowledge
                         (Ghost.find_by name: "Bael").name_reminder
                     else
                         puts "\n  Invalid command, type 'help' to see a list of available commands"
                     end
-                when "banish bael"
+                when "Banish Bael"
                     if Resident.miranda.knowledge && Resident.miranda.book
                         Ghost.banish
                     else
