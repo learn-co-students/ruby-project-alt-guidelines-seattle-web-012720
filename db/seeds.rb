@@ -1,7 +1,7 @@
 require 'pry'
 
 20.times do
-    User.create(name: Faker::Name.name)
+    User.create(name: Faker::Name.first_name)
 end
 
 str1 = "A pizza with Bell Pepper and Garlic.
@@ -53,8 +53,8 @@ end
 index = 0
 20.times do
     num = rand(4)
-    order = Order.create(user_id: User.all[index].id, num_pizzas: num)
-    order.pizzas << Pizza.all[index]
+    order = Order.create(user_id: User.all[index].id, pizza_id: Pizza.all[index].id, num_pizzas: num)
+    #order.pizza = Pizza.all[index]
     index += 1
 end
 

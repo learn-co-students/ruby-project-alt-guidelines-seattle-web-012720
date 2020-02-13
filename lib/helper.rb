@@ -19,10 +19,14 @@ class Helper
         ###
 
     def self.gets_answer
+        y = "Y".colorize(:red)
+        n = "N".colorize(:red)
+        str1 = "Please enter ".colorize(:blue)
+        str2 = " or ".colorize(:blue)
         a = gets.chomp
         if a.downcase != "y" || a.downcase != "n"
             until a.downcase == "y" || a.downcase == "n"
-                puts "\nPlease enter Y or N\n\n"
+                puts "\n#{str1}#{y}#{str2}#{n}\n\n"
                 a = gets.chomp 
             end 
         end
@@ -35,15 +39,20 @@ class Helper
     end
 
     def self.gets_number
+        str1 = "Please enter an ".colorize(:blue)
+        str2 = "integer".colorize(:red)
+        str3 = "Please enter a ".colorize(:blue)
+        str4 = "number".colorize(:red)
+        str5 = " greater than zero".colorize(:blue)
         number = gets.chomp
         if Helper.check_string(number)
             until !Helper.check_string(number)
-                puts "\nPlease enter an integer\n\n"
+                puts "\n#{str1}#{str2}\n\n"
                 number = gets.chomp 
             end 
-        elsif number.to_i < 0
+        elsif number.to_i <= 0
             until number.to_i > 0
-                puts "\nPlease enter a number greater than zero\n\n"
+                puts "\n#{str3}#{str4}#{str5}\n\n"
                 number = gets.chomp 
             end 
         end 
@@ -77,7 +86,7 @@ class Helper
     def self.fetch_user
         str = "name".colorize(:magenta)
         puts "\nWhat is your #{str}?\n\n"
-        name = gets.chomp
+        name = gets.chomp.downcase.capitalize
         user = User.find_by(name: name)
         if user == nil
             user = User.create(name: name)
@@ -111,9 +120,11 @@ class Helper
     end
 
     def self.what_toppings(number)
-        puts "What toppings would you like on your #{number.to_s.colorize(:red)} pizza#{Helper.plural(number)}?\n\n"
+        str = "toppings".colorize(:cyan)
+        puts "What #{str} would you like on your #{number.to_s.colorize(:red)} pizza#{Helper.plural(number)}?\n\n"
         answer = gets.chomp
-        toppings = answer.split(/, and | and |, /).sort()
+        toppings = answer.split(/, and | and |, /).sort().each {
+            |topping| topping.downcase.capitalize }
         toppings.each {|topping| 
             Topping.create(name: topping) if Topping.find_by(name: topping) == nil
         }
@@ -135,11 +146,13 @@ class Helper
         str4 = "- enter - ".colorize(:blue)
         str5 =" or ".colorize(:blue)
         str6 = "#{str4}#{str1.upcase.colorize(:red)}#{str5}#{str2.upcase.colorize(:red)}"
+        str7 = "Please enter ".colorize(:blue)
+        str8 = " or ".colorize(:blue)
         puts "\nWould you like to #{str1.capitalize} or #{str2.capitalize} a#{str3}? #{str6}\n\n"
         a = gets.chomp
         if a.downcase != str1 || a.downcase != str2
             until a.downcase == str1 || a.downcase == str2
-                puts "\nPlease enter #{str1.upcase.colorize(:red)} or #{str2.upcase.colorize(:red)}\n\n"
+                puts "\n#{str7}#{str1.upcase.colorize(:red)}#{str8}#{str2.upcase.colorize(:red)}\n\n"
                 a = gets.chomp 
             end 
         end
@@ -162,9 +175,10 @@ class Helper
         if number == 0
             puts "\nYou have nothing in your order."
         else
+            pizza = Pizza.all.select {|pizza| pizza.id == order.pizza_id}.first
             value1 = number.to_s.colorize(:red)
             value2 = Helper.plural(number)
-            value3 = Helper.topping_to_s(order.pizzas.first.toppings)
+            value3 = Helper.topping_to_s(pizza.toppings)
             puts "\nYour order is now #{value1} pizza#{value2} with \n#{value3}.\n\n"
         end
         number

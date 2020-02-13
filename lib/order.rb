@@ -1,9 +1,8 @@
 class Order < ActiveRecord::Base
     belongs_to :user
-    has_many :order_pizzas
-    has_many :pizzas, through: :order_pizzas
+    has_one :pizza
 
     def order_pizza(pizza) 
-        self.pizzas << pizza
+        self.pizza = pizza
     end
 end
