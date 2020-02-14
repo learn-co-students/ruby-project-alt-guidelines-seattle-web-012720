@@ -210,7 +210,10 @@ class CommandLineInterface
     end
 
     def check_player_name(entered_name)
-      if Player.where(name: entered_name).length == 0
+      if !entered_name
+        puts "Invalid entry. Please try again."
+        self.create_player
+      elsif Player.where(name: entered_name).length == 0
         puts "So #{entered_name.capitalize}, you think you know ALL the things... Let's see what you've got!"
         @player = Player.create(name: entered_name, clues_available: 3)
         @counter = 1
@@ -557,12 +560,13 @@ class CommandLineInterface
 
 
       def change_choice_string_to_array(choice_string)
-        array = choice_string.split(",")
+        array = choice_string.split("\",")
+        binding.pry
         @choices = array.map {|choice|
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
             choice = choice.gsub('&quot;', "'")
-            choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '')
+            choice.gsub!(/[^a-zA-Z0-9\-^.?\/|\s*]/, '')
             choice = choice.strip} 
       end
 
