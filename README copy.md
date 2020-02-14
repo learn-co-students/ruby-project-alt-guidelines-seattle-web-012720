@@ -8,27 +8,14 @@ See a <a href="https://www.youtube.com/watch?v=O-1oNOWElmk&feature=youtu.be">vid
 ## Installation
 
  - Clone down this project repository by clicking the green "Clone or download" button above. Copy the SSH link, and open up your computer's Terminal. Inside, type "git clone <the link you've just copied>". This should open up the project: You'll see folders labeled "bin", "config", "db", "lib", etc.
- 
 
  - Back in your terminal, type "bundle install".
-  ```
-  bundle install
-  ```
  - Then, from the root directory, run "rake db:migrate" to create the database locally.
- ```
-  rake db:migrate
-  ```
  - Lastly, run "rake db:seed". Now you're ready to go!
-  ```
-  rake db:seed
-  ```
 
 ## Running the Application
 
 To begin the game, type "ruby bin/run.rb".
- ```
-  ruby bin/run.rb
-  ```
 Good luck!
 
 ## Playing the Game: Commands
@@ -61,8 +48,6 @@ Player's Statistics Page
 ## Credits
 
 Thank you to...
-
-... the <a href="https://opentdb.com/api_config.php">Open Trivia DB</a>, which provided all the questions!
 
 ... Piotr Murach for his gem <a href="https://github.com/piotrmurach/tty-prompt">TTY-prompt</a>
 
