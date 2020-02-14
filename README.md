@@ -49,6 +49,8 @@ Player's Statistics Page
 
 Thank you to...
 
+... the <a href="https://opentdb.com/api_config.php">Open Trivia DB</a>, which provided all the questions!
+
 ... Piotr Murach for his gem <a href="https://github.com/piotrmurach/tty-prompt">TTY-prompt</a>
 
 ... Michael Tierney for the gem <a href="https://github.com/miketierney/artii">artii</a>
