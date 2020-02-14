@@ -19,15 +19,15 @@ See a <a href="https://www.youtube.com/watch?v=O-1oNOWElmk&feature=youtu.be">vid
   rake db:migrate
   ```
  - Lastly, run "rake db:seed". Now you're ready to go!
-   ```
-   rake db:seed
+  ```
+  rake db:seed
   ```
 
 ## Running the Application
 
 To begin the game, type "ruby bin/run.rb".
  ```
-    ruby bin/run.rb
+  ruby bin/run.rb
   ```
 Good luck!
 
