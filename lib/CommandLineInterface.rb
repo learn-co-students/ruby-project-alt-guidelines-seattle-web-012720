@@ -561,7 +561,7 @@ class CommandLineInterface
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
             choice = choice.gsub('&quot;', "'")
-            # choice.gsub!(/[^a-zA-Z0-9.?-\/|\s*]/, '')
+            # choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '')
             choice = choice.strip} 
       end
 
