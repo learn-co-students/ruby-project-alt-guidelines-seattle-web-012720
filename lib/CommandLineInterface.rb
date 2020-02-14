@@ -283,9 +283,8 @@ class CommandLineInterface
 
       def read_question
         @q = @new_question.question
-        @q = @q.gsub("&#039;", "'")
-        @q = @q.gsub('&quot;', "'")
-        @q = @q.gsub(/[^a-zA-Z0-9?|\s*]/, '')
+        @q = @q.gsub('&amp;', "&")
+        # @q = @q.gsub(/[^a-zA-Z0-9?|\s*]/, '')
         choice_string = @new_question.choices
         change_choice_string_to_array(choice_string)
         puts ''
@@ -562,7 +561,8 @@ class CommandLineInterface
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
             choice = choice.gsub('&quot;', "'")
-            choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '').strip} 
+            # choice.gsub!(/[^a-zA-Z0-9.?-\/|\s*]/, '')
+            choice = choice.strip} 
       end
 
       def end_game

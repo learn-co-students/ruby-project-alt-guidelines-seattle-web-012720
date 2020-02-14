@@ -33,6 +33,7 @@ def parse_questions_hash(questions_hash)
         answers = i["incorrect_answers"]
         fixed_answers = answers.map {|answer|
             answer = answer.gsub("&quot;", "'")
+            answer = answer.gsub('&amp;', "&")
             answer = answer.gsub("&#039;", "'")}
         @question = i["question"].gsub("&quot;", "'")
         @question = @question.gsub("&#039;", "'")
