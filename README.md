@@ -3,6 +3,8 @@
 Tree-Va Time was inspired by the infamous typo at a local Vermont bar that was advertising its weekly "Triva Nights".
 This CLI app is a simple one, allowing users to create an account, select questions from a variety of categories, get hints, and ultimately determine just how prepared they might be for the next live taping of Jeopardy!.
 
+See a <a href="https://www.youtube.com/watch?v=O-1oNOWElmk&feature=youtu.be">video demo</a> here!
+
 ## Installation
 
  - Clone down this project repository by clicking the green "Clone or download" button above. Copy the SSH link, and open up your computer's Terminal. Inside, type "git clone <the link you've just copied>". This should open up the project: You'll see folders labeled "bin", "config", "db", "lib", etc.
