@@ -153,6 +153,7 @@ class CommandLineInterface
             PlayersQuestion.where({player_id: @player.id}).delete_all
             @player.update(clues_available: 3)
             @player.update(correct_counter: 0)
+            @counter = 1
             self.get_question
           when false
             self.log_in_menu
@@ -440,7 +441,6 @@ class CommandLineInterface
             puts ''
             puts ''
         end
-        @counter = @counter + 1
         neeext = TTY::Prompt.new
         keystroke = neeext.keypress("Hit ENTER or SPACE to continue.", keys: [:space, :return])
         if keystroke
@@ -460,6 +460,7 @@ class CommandLineInterface
           menu.choice "I'm in a groove. Give me another question.", 1
           menu.choice "Brain hurts. Just tell me my score.", 2
         end
+        @counter = @counter + 1
         self.run(next_move)
       end
     
@@ -561,7 +562,7 @@ class CommandLineInterface
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
             choice = choice.gsub('&quot;', "'")
-            # choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '')
+            choice.gsub!(/[^a-zA-Z0-9.?\/|\s*]/, '')
             choice = choice.strip} 
       end
 
