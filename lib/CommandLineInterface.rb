@@ -561,7 +561,6 @@ class CommandLineInterface
 
       def change_choice_string_to_array(choice_string)
         array = choice_string.split("\",")
-        binding.pry
         @choices = array.map {|choice|
             choice = choice.gsub("&#039", "'");  
             choice = choice.gsub('&amp;', "&")
