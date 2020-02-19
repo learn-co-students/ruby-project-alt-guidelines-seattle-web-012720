@@ -78,3 +78,5 @@ Contributions are most welcome. This is very much a beginner project, and constr
 ## License
 
 This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+Enjoy.
